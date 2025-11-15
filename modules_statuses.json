@@ -1,0 +1,7 @@
+{
+    "User": true,
+    "Interaction": true,
+    "Content": true,
+    "Media": true,
+    "Admin": true
+}
