@@ -46,9 +46,4 @@ class Login extends Component
         Toaster::success(__('Login Successful'));
         $this->redirectRoute('home');
     }
-
-    public function foo()
-    {
-        Toaster::success(__('Login Successful'));
-    }
 }

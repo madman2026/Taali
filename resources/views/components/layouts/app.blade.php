@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="rtl"
-      x-data="themeSwitcher()"
-      x-init="initTheme()"
-      :class="{ 'dark': isDarkMode }"
-      class="scroll-smooth antialiased transition-colors duration-300">
+      x-data="themeManager()"
+      x-init="init()"
+      :class="isDark ? 'dark' : ''"
+      class="scroll-smooth antialiased transition-colors duration-300 min-h-screen flex flex-col">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>{{ $title ?? config('app.name') }}</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -20,57 +21,61 @@
             font-weight: normal;
             font-style: normal;
         }
-        body {
-            font-family: 'Vazir', sans-serif;
-        }
     </style>
 </head>
 
-<body class="bg-white text-gray-800 dark:bg-gray-900 dark:text-gray-100 min-h-flex min-w-full flex-col transition-colors duration-300 relative">
+<body class="flex flex-col min-h-screen relative transition-colors duration-300">
 
-    <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <div class="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-white/30 to-gray-100/50 dark:from-gray-900/50 dark:via-gray-950/30 dark:to-gray-900/50"></div>
+<!-- Soft gradient background -->
+<div class="background-gradient pointer-events-none"></div>
 
-    </div>
+<div class="relative z-10 flex-1 flex flex-col">
 
-    <div class="relative z-10">
-        @if(isset($header))
-            {{$header}}
-        @else
-            @include('components.partials.header')
-        @endif
+    @if(isset($header))
+        {{ $header }}
+    @else
+        @include('components.partials.header')
+    @endif
 
-        <main class="flex-1 container mx-auto ">
-            {{ $slot }}
-        </main>
+    <main class="flex-1 container mx-auto px-4 md:px-6 lg:px-8">
+        {{ $slot }}
+    </main>
 
-        @include('components.partials.footer')
-    </div>
+    @include('components.partials.footer')
+</div>
 
 @livewireScripts
 <x-toaster-hub />
 <livewire:confirm-modal />
+
+<!-- Theme Manager -->
 <script>
-    function themeSwitcher() {
+    function themeManager() {
         return {
-            isDarkMode: localStorage.getItem('theme') === 'dark',
-            toggleTheme() {
-                this.isDarkMode = !this.isDarkMode;
-                localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
-                document.documentElement.classList.toggle('dark', this.isDarkMode);
+            palette: localStorage.getItem('palette') || 'spiritual',
+            isDark: JSON.parse(localStorage.getItem('darkMode')) ?? false,
+            initialized: false,
+
+            init() {
+                if (this.initialized) return;
+                this.initialized = true;
+
+                document.documentElement.setAttribute('data-theme', this.palette);
             },
-            initTheme() {
-                const storedTheme = localStorage.getItem('theme');
-                if (storedTheme === 'dark' || (!storedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                    this.isDarkMode = true;
-                    document.documentElement.classList.add('dark');
-                } else {
-                    this.isDarkMode = false;
-                    document.documentElement.classList.remove('dark');
-                }
+
+            toggleDark() {
+                this.isDark = !this.isDark;
+                localStorage.setItem('darkMode', this.isDark);
+            },
+
+            switchPalette(newPalette) {
+                this.palette = newPalette;
+                localStorage.setItem('palette', newPalette);
+                document.documentElement.setAttribute('data-theme', newPalette);
             }
         }
     }
 </script>
+
 </body>
 </html>

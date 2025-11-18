@@ -10,9 +10,10 @@ return new class extends Migration
         Schema::create('contents', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
-            $table->string('type')->default('article');
+            $table->string('type');
             $table->string('title');
-            $table->text('excerpt');
+            $table->string('slug')->unique();
+            $table->text('excerpt')->nullable();
             $table->text('description')->nullable();
             $table->boolean('is_published')->default(false);
             $table->timestamp('published_at')->nullable();

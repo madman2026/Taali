@@ -2,6 +2,7 @@
 
 namespace Modules\Content\Models;
 
+use App\Contracts\HasSlug;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,14 +18,24 @@ use RalphJSmit\Laravel\SEO\Support\HasSEO;
 
 class Content extends Model
 {
-    use HasFactory , HasSEO;
+    use HasFactory , HasSEO , HasSlug;
 
     /**
      * The attributes that are mass assignable.
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'slug',
+        'user_id',
+        'type',
+        'title',
+        'excerpt',
+        'description',
+        'is_published',
+        'published_at'
+    ];
 
     protected $casts = [
+        'published_at',
         'type' => ContentTypeEnum::class,
     ];
 
