@@ -21,6 +21,7 @@ final class AuthService extends BaseService
     {
         return $this->execute(function () use ($loginData) {
             $user = $this->loginAction->handle($loginData);
+
             return $user;
         });
     }
@@ -30,6 +31,7 @@ final class AuthService extends BaseService
         return $this->execute(function () use ($registerData) {
             $user = $this->registerAction->handle($registerData);
             event(new Registered($user));
+
             return $user;
         });
     }

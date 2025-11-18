@@ -12,8 +12,8 @@ abstract class BaseService
 {
     protected function execute(
         callable $callback,
-        string $errorMessage = "Internal Server Error!",
-        string $successMessage = "Operation Completed Successfully!",
+        string $errorMessage = 'Internal Server Error!',
+        string $successMessage = 'Operation Completed Successfully!',
         bool $useTransaction = true,
     ): ServiceResponse {
         try {
@@ -21,7 +21,7 @@ abstract class BaseService
                 ? DB::transaction($callback)
                 : $callback();
 
-            return ServiceResponse::success($result , $successMessage);
+            return ServiceResponse::success($result, $successMessage);
         } catch (ValidationException $e) {
             return ServiceResponse::error(
                 $e->getMessage(),
@@ -30,16 +30,16 @@ abstract class BaseService
         } catch (Throwable $e) {
 
             Log::error($errorMessage, [
-                "exception" => $e,
-                "trace" => $e->getTraceAsString(),
-                "user_id" => Auth::id() ?? null,
+                'exception' => $e,
+                'trace' => $e->getTraceAsString(),
+                'user_id' => Auth::id() ?? null,
             ]);
 
             report($e);
 
             return ServiceResponse::error(
                 $errorMessage,
-                env("APP_DEBUG") ? $e->getMessage() : null,
+                env('APP_DEBUG') ? $e->getMessage() : null,
             );
         }
     }

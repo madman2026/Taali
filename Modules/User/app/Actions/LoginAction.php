@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Modules\User\Contracts\LoginData;
-use Illuminate\Support\Str;
 use Modules\User\Models\User;
 
 final class LoginAction
@@ -25,6 +25,7 @@ final class LoginAction
     protected function throttleKey(string $email): string
     {
         $ip = request()->ip() ?? 'unknown';
+
         return Str::lower($email).'|'.$ip;
     }
 
@@ -39,10 +40,10 @@ final class LoginAction
             ]);
         }
         $user = User::whereEmail($data->email)->first();
-        if (Hash::check($data->password , $user->password))
-        {
+        if (Hash::check($data->password, $user->password)) {
             Auth::login($user);
             RateLimiter::clear($key);
+
             return Auth::user();
         }
         RateLimiter::hit($key, $this->decayMinutes * 60);

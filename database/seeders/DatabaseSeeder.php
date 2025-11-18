@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Database\Factories\UserFactory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Modules\User\Database\Seeders\UserDatabaseSeeder;
@@ -20,7 +19,7 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         $this->call([
-            UserDatabaseSeeder::class
+            UserDatabaseSeeder::class,
         ]);
     }
 }

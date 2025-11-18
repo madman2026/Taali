@@ -21,4 +21,3 @@ class LikeFactory extends Factory
         ];
     }
 }
-

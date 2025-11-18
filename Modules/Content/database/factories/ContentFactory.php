@@ -19,4 +19,3 @@ class ContentFactory extends Factory
         return [];
     }
 }
-

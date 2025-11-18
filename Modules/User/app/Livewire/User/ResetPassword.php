@@ -2,13 +2,13 @@
 
 namespace Modules\User\Livewire\User;
 
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Devrabiul\ToastMagic\Facades\ToastMagic;
 use Modules\User\Services\UserService;
-use Illuminate\Validation\ValidationException;
-use Masmerise\Toaster\Toaster;
 
 #[Layout('user::components.layouts.master')]
 #[Title('Reset Password')]
@@ -42,15 +42,15 @@ class ResetPassword extends Component
 
             if ($response->status) {
                 $this->reset(['oldPassword', 'newPassword', 'newPassword_confirmation']);
-                Toaster::success(__('Reset Password Successfully!'));
+                ToastMagic::success(__('Reset Password Successfully!'));
             } else {
-                Toaster::error(($response->message ?? __('Somthing Wen Wrong!')));
+                ToastMagic::error(($response->message ?? __('Somthing Wen Wrong!')));
             }
 
         } catch (ValidationException $e) {
             $this->addError('oldPassword', $e->getMessage());
         } catch (\Throwable $e) {
-            Toaster::error(__('Somthing Wen Wrong On Change Password!'));
+            ToastMagic::error(__('Somthing Wen Wrong On Change Password!'));
         }
     }
 

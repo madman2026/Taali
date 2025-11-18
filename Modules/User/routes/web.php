@@ -15,12 +15,12 @@ Route::middleware('auth')->prefix('user')->group(function () {
 
     Route::get('dashboard', \Modules\User\Livewire\User\Dashboard::class)->name('dashboard');
 
-    Route::get('profile' , \Modules\User\Livewire\User\UpdateUser::class)->name('profile');
+    Route::get('profile', \Modules\User\Livewire\User\UpdateUser::class)->name('profile');
 
-    Route::get('settings' , \Modules\User\Livewire\User\Settings::class)->name('settings');
+    Route::get('settings', \Modules\User\Livewire\User\Settings::class)->name('settings');
 
-    Route::put('account-deactivate' , \Modules\User\Http\Controllers\DeactivateUserController::class)->name('user.deactivate');
+    Route::put('account-deactivate', \Modules\User\Http\Controllers\DeactivateUserController::class)->name('user.deactivate');
 
-    Route::delete('account-delete' , \Modules\User\Http\Controllers\DeleteUserController::class)->name('user.delete');
+    Route::delete('account-delete', \Modules\User\Http\Controllers\DeleteUserController::class)->name('user.delete');
 
 });

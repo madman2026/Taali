@@ -1,4 +1,5 @@
 <?php
+
 namespace Modules\User\Contracts;
 
 final class UpdateUserData
@@ -20,7 +21,7 @@ final class UpdateUserData
     {
         return [
             'email' => $this->email,
-            'name' => $this->name
+            'name' => $this->name,
         ];
     }
 }

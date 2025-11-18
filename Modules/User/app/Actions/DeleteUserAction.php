@@ -10,6 +10,7 @@ class DeleteUserAction
     {
         $user = Auth::user();
         $user->delete();
+
         return true;
     }
 }

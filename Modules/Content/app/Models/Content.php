@@ -3,8 +3,8 @@
 namespace Modules\Content\Models;
 
 use App\Contracts\HasSlug;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Content\Enums\ContentTypeEnum;
@@ -31,7 +31,7 @@ class Content extends Model
         'excerpt',
         'description',
         'is_published',
-        'published_at'
+        'published_at',
     ];
 
     protected $casts = [

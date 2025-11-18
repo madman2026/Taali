@@ -8,22 +8,24 @@ use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Masmerise\Toaster\Toaster;
+use Devrabiul\ToastMagic\Facades\ToastMagic;
 use Modules\Media\Enums\MediaTypeEnum;
 use Modules\User\Contracts\UpdateUserData;
 use Modules\User\Services\UserService;
 
-#[Layout('user::components.layouts.master')]
+#[Layout('components.layouts.master')]
 #[Title('Update User')]
 class UpdateUser extends Component
 {
     use WithFileUploads;
 
     public string $email;
+
     public string $name;
 
     #[Validate('nullable|image|mimes:jpeg,jpg,png|max:5000')]
     public $uploadedImage;
+
     public string $existingImagePath = '';
 
     protected UserService $service;
@@ -44,7 +46,7 @@ class UpdateUser extends Component
     public function updateUser()
     {
         $this->validate([
-            'email' => 'required|email|unique:users,email,' . auth()->id(),
+            'email' => 'required|email|unique:users,email,'.auth()->id(),
             'name' => 'required|string|max:255',
         ]);
 
@@ -54,11 +56,12 @@ class UpdateUser extends Component
 
         $userImage = Auth::user()->image()->createOrFirst(
             [
-                'path' => $this->existingImagePath
+                'path' => $this->existingImagePath,
             ]
         );
-        if (isset($path))
+        if (isset($path)) {
             $userImage->path = $path;
+        }
         $userImage->type = MediaTypeEnum::IMAGE;
         $userImage->mime_type = $this->uploadedImage ? $this->uploadedImage->getMimeType() : $userImage->mime_type;
         $userImage->save();
@@ -71,9 +74,9 @@ class UpdateUser extends Component
         $response = $this->service->updateUser($data);
 
         if ($response->status) {
-            Toaster::success(__('Update Successful'));
+            ToastMagic::success(__('Update Successful'));
         } else {
-            Toaster::error($response->message ?? __('Update Failed'));
+            ToastMagic::error($response->message ?? __('Update Failed'));
         }
     }
 

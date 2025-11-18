@@ -2,8 +2,8 @@
 
 namespace Modules\Interaction\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Modules\Content\Models\Content;
 use Modules\User\Models\User;
 

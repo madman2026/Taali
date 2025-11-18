@@ -13,7 +13,6 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 
-    <!-- Font -->
     <style>
         @font-face {
             font-family: 'Vazir';
@@ -38,6 +37,7 @@
             background: linear-gradient(135deg, #111111, #222222);
         }
     </style>
+    {!! ToastMagic::styles() !!}
 </head>
 
 <body class="flex flex-col min-h-screen transition-colors duration-300 bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100">
@@ -68,7 +68,7 @@
     </div>
 
     @livewireScripts
-    <x-toaster-hub />
+    {!! ToastMagic::scripts() !!}
     <livewire:confirm-modal />
 
     <script>

@@ -2,7 +2,6 @@
 
 namespace Modules\User\Actions;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\User\Contracts\UpdateUserData;
 

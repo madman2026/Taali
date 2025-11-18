@@ -2,12 +2,12 @@
 
 namespace App\Livewire;
 
-use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ConfirmModal extends Component
 {
     public bool $show = false;
+
     public array $data = [];
 
     protected $listeners = [
@@ -32,7 +32,7 @@ class ConfirmModal extends Component
 
     public function confirm(): void
     {
-        if (!empty($this->data['confirmEvent'])) {
+        if (! empty($this->data['confirmEvent'])) {
             $this->dispatch($this->data['confirmEvent']);
         }
         $this->closeModal();

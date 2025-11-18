@@ -2,11 +2,12 @@
 
 namespace Modules\Interaction\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Content\Models\Content;
 use Modules\User\Models\User;
+
 // use Modules\Interaction\Database\Factories\CommentFactory;
 
 class Comment extends Model
@@ -21,7 +22,7 @@ class Comment extends Model
         'user_id',
         'ip_address',
         'title',
-        'body'
+        'body',
     ];
 
     /**

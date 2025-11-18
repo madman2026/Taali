@@ -19,4 +19,3 @@ class MediaFactory extends Factory
         return [];
     }
 }
-

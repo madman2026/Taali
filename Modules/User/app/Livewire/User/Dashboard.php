@@ -4,13 +4,13 @@ namespace Modules\User\Livewire\User;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
-use Livewire\Attributes\Layout;
-use Livewire\Attributes\Title;
-use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
-use Masmerise\Toaster\Toaster;
+use Livewire\Attributes\Title;
+use Livewire\Component;
+use Devrabiul\ToastMagic\Facades\ToastMagic;
 use Throwable;
 
 #[Layout('components.layouts.master')]
@@ -18,11 +18,17 @@ use Throwable;
 class Dashboard extends Component
 {
     public $user;
+
     public bool $isActive = false;
+
     public int $views = 0;
+
     public int $likes = 0;
+
     public int $commentsCount = 0;
+
     public int $contentsCount = 0;
+
     public Collection $contents;
 
     public function mount()
@@ -79,6 +85,7 @@ class Dashboard extends Component
     {
         if ($this->isActive) {
             $this->deactivateAccount();
+
             return;
         }
 
@@ -89,14 +96,14 @@ class Dashboard extends Component
     {
         $this->user->update(['status' => false]);
         $this->isActive = false;
-        Toaster::success('حساب شما غیرفعال شد.');
+        ToastMagic::success('حساب شما غیرفعال شد.');
     }
 
     public function activateAccount(): void
     {
         $this->user->update(['status' => true]);
         $this->isActive = true;
-        Toaster::success('حساب شما فعال شد.');
+        ToastMagic::success('حساب شما فعال شد.');
     }
 
     #[On('deleteAccount')]
@@ -108,12 +115,13 @@ class Dashboard extends Component
                 Auth::logout();
             });
 
-            Toaster::success(__('Account Deleted Successfully!'));
+            ToastMagic::success(__('Account Deleted Successfully!'));
+
             return redirect()->route('home');
 
         } catch (Throwable $e) {
             report($e);
-            Toaster::error(__('خطایی در حذف حساب رخ داد.'));
+            ToastMagic::error(__('خطایی در حذف حساب رخ داد.'));
         }
 
         return null;

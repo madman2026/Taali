@@ -21,10 +21,10 @@ use Spatie\Translatable\HasTranslations;
 
 // use Modules\User\Database\Factories\UserFactory;
 
-class User  extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory , HasSettings, Notifiable, HasRoles, SoftDeletes, HasTranslations;
+    use HasFactory , HasRoles, HasSettings, HasTranslations, Notifiable, SoftDeletes;
 
     /**
      * Translatable attributes (if you plan to use localization for user names, etc.)
@@ -32,7 +32,7 @@ class User  extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     public array $translatable = [
-        'name'
+        'name',
     ];
 
     /**
@@ -45,7 +45,7 @@ class User  extends Authenticatable implements MustVerifyEmail
         'status',
         'email',
         'password',
-        'settings'
+        'settings',
     ];
 
     /**
@@ -68,7 +68,7 @@ class User  extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'settings' => 'array'
+            'settings' => 'array',
         ];
     }
 

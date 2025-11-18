@@ -2,7 +2,6 @@
 
 namespace Modules\User\Actions;
 
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -14,6 +13,7 @@ final class ResetUserPasswordAction
         $user->update([
             'password' => Hash::make($data['newPassword']),
         ]);
+
         return true;
     }
 }

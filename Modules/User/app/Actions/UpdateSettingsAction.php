@@ -10,6 +10,7 @@ class UpdateSettingsAction
     {
         $user = Auth::user();
         $user->update(['settings' => json_encode($settings)]);
+
         return $user;
     }
 }

@@ -1,22 +1,30 @@
 <div
     x-data="{ sidebarOpen: true }"
-    class="flex min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100
+    class="flex min-h-screen bg-linear-to-br from-gray-50 via-white to-gray-100
            dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 transition-colors duration-300">
 
+    <!-- Sidebar toggle button (mobile) -->
     <button @click="sidebarOpen = !sidebarOpen"
             x-show='!sidebarOpen'
-            class=" fixed top-4 right-4 z-50 p-2 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-500 transition">
+            class="fixed top-4 right-4 z-50 p-2 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-500 transition">
         <x-heroicon-o-bars-3 class="w-6 h-6" />
     </button>
 
+    <!-- Sidebar -->
     <aside x-show="sidebarOpen"
-           x-transition
+           x-transition:enter="transition transform duration-300"
+           x-transition:enter-start="translate-x-full opacity-0"
+           x-transition:enter-end="translate-x-0 opacity-100"
+           x-transition:leave="transition transform duration-300"
+           x-transition:leave-start="translate-x-0 opacity-100"
+           x-transition:leave-end="translate-x-full opacity-0"
            class="fixed top-0 right-0 w-64 md:w-64 h-full z-40
                   bg-white/95 dark:bg-gray-900/95 border-l border-gray-200 dark:border-gray-700
                   shadow-xl backdrop-blur-md overflow-y-auto
-                  h-[calc(100vh-1rem)] scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700
+                  scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700
                   transform transition-transform duration-300 ease-in-out">
 
+        <!-- Sidebar Header -->
         <div class="p-5 flex items-center justify-between border-b border-gray-200 dark:border-gray-700">
             <span class="font-semibold text-lg text-indigo-600 dark:text-indigo-400 tracking-tight">
                 {{ config('app.name') }}
@@ -26,7 +34,8 @@
             </button>
         </div>
 
-        <nav class="p-4 space-y-1">
+        <!-- Navigation -->
+        <nav class="p-4 space-y-2">
             @php
                 $links = [
                     ['route'=>'dashboard','icon'=>'home','label'=>__('Dashboard')],
@@ -48,6 +57,7 @@
 
             <div class="border-t border-gray-200 dark:border-gray-700 my-3"></div>
 
+            <!-- Account Status Button -->
             <button type="button"
                 wire:click="confirmToggleStatus"
                 class="flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-200 w-full"
@@ -59,8 +69,7 @@
                 {{ $isActive ? __('Deactivate Account') : __('Activate Account') }}
             </button>
 
-
-
+            <!-- Delete Account -->
             <button type="button"
                 wire:click="confirmDeleteAccount"
                 class="flex items-center gap-3 px-3 py-2 rounded-xl text-red-600 dark:text-red-400
@@ -68,9 +77,6 @@
                 <x-heroicon-o-trash class="w-5 h-5" />
                 {{ __('Delete Account') }}
             </button>
-
-
-
 
             @if(auth()->user()?->hasRole('admin'))
                 <div class="border-t border-gray-200 dark:border-gray-700 my-3"></div>
@@ -88,6 +94,7 @@
                 </a>
             @endif
 
+            <!-- Logout -->
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit"
@@ -101,9 +108,11 @@
         </nav>
     </aside>
 
+    <!-- Main Content -->
     <main class="flex-1 p-6 transition-all duration-300">
         <div class="max-w-7xl mx-auto space-y-8">
 
+            <!-- Stats Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 @php
                     $stats = [
@@ -124,7 +133,7 @@
                 @foreach ($stats as $s)
                     <div class="group p-5 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700
                                 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex items-center gap-4">
-                        <div class="p-3 rounded-xl {{ $colors[$s['color']] }} group-hover:scale-110 transition">
+                        <div class="p-3 rounded-xl {{ $colors[$s['color']] }} group-hover:scale-110 transition-transform duration-300">
                             <x-dynamic-component :component="'heroicon-o-' . $s['icon']" class="w-6 h-6" />
                         </div>
                         <div>
@@ -150,7 +159,7 @@
 
                 <ul class="divide-y divide-gray-200 dark:divide-gray-700">
                     @forelse ($contents ?? [] as $c)
-                        <li class="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 hover:bg-gray-50 dark:hover:bg-gray-700/40 transition-all">
+                        <li class="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 hover:bg-gray-50 dark:hover:bg-gray-700/40 transition-all duration-200">
                             <div>
                                 <p class="font-medium text-gray-800 dark:text-gray-100">{{ $c->title }}</p>
                                 <p class="text-sm text-gray-500 dark:text-gray-400">{{ $c->category->name ?? '-' }}</p>

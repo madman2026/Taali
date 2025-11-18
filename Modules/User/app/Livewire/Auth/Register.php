@@ -16,10 +16,13 @@ class Register extends Component
 {
     #[Validate('required|email|unique:users,email')]
     public ?string $email;
+
     #[Validate('required|string|unique:users,name')]
     public ?string $name;
+
     #[Validate('required|confirmed|string|min:6')]
     public ?string $password;
+
     public ?string $password_confirmation;
 
     protected AuthService $service;
@@ -28,6 +31,7 @@ class Register extends Component
     {
         $this->service = $service;
     }
+
     public function render()
     {
         return view('user::livewire.auth.register');

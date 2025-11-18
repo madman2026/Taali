@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Modules\User\Contracts\RegisterData;
 use Modules\User\Models\User;
+
 final class RegisterAction
 {
     public function handle(RegisterData $data): ?Authenticatable

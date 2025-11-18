@@ -103,6 +103,8 @@
     "If you're having trouble clicking the \":actionText\" button, copy and paste the URL below\ninto your web browser:": "اگر با کلیک کردن روی دکمه \":actionText\" مشکل دارید، لینک زیر را کپی کنید و در مرورگر خود وارد کنید:",
     "IM Used": "IM استفاده شده",
     "Image": "تصویر",
+    "Name": "نام",
+    "Profile Picture":"عکس فروفایل",
     "Old Password": "رمز عبور قدیمی",
     "New Password": "رمز عبور جدید",
     "Password Confirmation": "تائید رمز عبور ",

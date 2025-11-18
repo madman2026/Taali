@@ -2,14 +2,14 @@
 
 namespace Modules\User\Livewire\Auth;
 
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
-use Masmerise\Toaster\Toaster;
+use Devrabiul\ToastMagic\Facades\ToastMagic;
 use Modules\User\Contracts\LoginData;
 use Modules\User\Services\AuthService;
-use Illuminate\Validation\ValidationException;
 
 #[Layout('user::components.layouts.auth-master')]
 #[Title('Login')]
@@ -37,13 +37,13 @@ class Login extends Component
     {
 
         $result = $this->service->login(LoginData::fromArray($this->validate()));
-        if (!$result->status) {
+        if (! $result->status) {
             throw ValidationException::withMessages([
                 'email' => __($result->message),
             ]);
         }
 
-        Toaster::success(__('Login Successful'));
+        ToastMagic::success(__('Login Successful'));
         $this->redirectRoute('home');
     }
 }

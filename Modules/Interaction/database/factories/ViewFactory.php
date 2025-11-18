@@ -21,4 +21,3 @@ class ViewFactory extends Factory
         ];
     }
 }
-

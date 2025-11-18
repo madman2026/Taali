@@ -7,9 +7,10 @@ use Livewire\Component;
 
 class Settings extends Component
 {
-
     public $theme;
+
     public $language;
+
     public $font_size;
 
     public function mount()
@@ -32,5 +33,3 @@ class Settings extends Component
         return view('user::livewire.user.settings');
     }
 }
-
-

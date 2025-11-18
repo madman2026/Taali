@@ -2,12 +2,11 @@
 
 namespace Modules\Content\Listeners;
 
-use Modules\Content\Events\ContentCreated;
-use Modules\Media\Models\Media;
+use FFMpeg;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Storage;
-use FFMpeg;
+use Modules\Content\Events\ContentCreated;
 
 class ProcessContentMedia implements ShouldQueue
 {
@@ -21,7 +20,7 @@ class ProcessContentMedia implements ShouldQueue
         foreach ($mediaData['images'] ?? [] as $image) {
             $path = $image->store('images', 'public');
 
-        //    Image::make(Storage::disk('public')->path($path))->resize(1200, 800)->save();
+            //    Image::make(Storage::disk('public')->path($path))->resize(1200, 800)->save();
 
             $content->media()->create([
                 'type' => 'image',

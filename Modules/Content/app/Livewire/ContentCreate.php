@@ -4,7 +4,7 @@ namespace Modules\Content\Livewire;
 
 use Livewire\Attributes\Validate;
 use Livewire\Component;
-use Masmerise\Toaster\Toaster;
+use Devrabiul\ToastMagic\Facades\ToastMagic;
 use Modules\Content\Services\ContentService;
 
 class ContentCreate extends Component
@@ -46,19 +46,19 @@ class ContentCreate extends Component
 
         $this->service->create(
             payload: [
-                'title'       => $this->title,
-                'slug'        => $this->slug,
-                'excerpt'     => $this->excerpt,
+                'title' => $this->title,
+                'slug' => $this->slug,
+                'excerpt' => $this->excerpt,
                 'description' => $this->description,
-                'type'        => $this->type,
-                'user_id'     => auth('web')->id(),
-                'image_url'   => $this->image,
-                'audio_url'   => $this->audio,
-                'video_url'   => $this->videoUrl,
+                'type' => $this->type,
+                'user_id' => auth('web')->id(),
+                'image_url' => $this->image,
+                'audio_url' => $this->audio,
+                'video_url' => $this->videoUrl,
             ]
         );
 
-        Toaster::success(__('Content created and queued for processing!'));
+        ToastMagic::success(__('Content created and queued for processing!'));
 
         return $this->redirectRoute('content.index');
     }

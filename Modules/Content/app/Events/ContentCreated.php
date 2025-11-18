@@ -10,8 +10,8 @@ class ContentCreated
 {
     use Dispatchable, SerializesModels;
 
-
     public $content;
+
     public $mediaData;
 
     public function __construct(Content $content, array $mediaData = [])
