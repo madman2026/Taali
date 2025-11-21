@@ -5,17 +5,39 @@ namespace Modules\Content\Actions;
 use Modules\Content\Enums\ContentTypeEnum;
 use Modules\Content\Events\ContentCreated;
 use Modules\Content\Models\Content;
+use Modules\Media\Enums\MediaTypeEnum;
 
 class ContentCreateAction
 {
     public function handle(array $payload): Content
     {
+        // تشخیص نوع محتوا با آرایه و فیلتر
+        $flags = [
+            'text' => !empty($payload['title']) || !empty($payload['excerpt']) || !empty($payload['description']),
+            'image' => !empty($payload['image'] ?? null),
+            'audio' => !empty($payload['audio'] ?? null),
+            'video' => !empty($payload['videoUrl'] ?? null) || !empty($payload['videoHash'] ?? null),
+        ];
+
+        $activeTypes = array_filter($flags);
+
+        $type = match(count($activeTypes)) {
+            default => ContentTypeEnum::Post, // چند نوع محتوا همزمان
+            1 => match (key($activeTypes)) {
+                'text' => ContentTypeEnum::Article,
+                'image' => ContentTypeEnum::Photographic,
+                'audio' => ContentTypeEnum::Podcast,
+                'video' => ContentTypeEnum::Video,
+            },
+        };
+
+        // ذخیره محتوا
         $content = Content::create([
             'title' => $payload['title'],
-            'slug' => $payload['slug'],
             'excerpt' => $payload['excerpt'],
             'description' => $payload['description'] ?? null,
             'user_id' => $payload['user_id'],
+            'type' => $type->value,
         ]);
 
         $this->storeMedia($content, $payload);
@@ -27,31 +49,31 @@ class ContentCreateAction
 
     private function storeMedia(Content $content, array $payload): void
     {
-        // ========== IMAGE ==========
-        if (! empty($payload['image_url'])) {
+        // IMAGE
+        if (!empty($payload['image'])) {
             $content->media()->create([
-                'type' => ContentTypeEnum::IMAGE,
-                'path' => $payload['image_url'],
-                'metadata' => ['original_url' => $payload['image_url']],
+                'type' => MediaTypeEnum::IMAGE,
+                'path' => $payload['image'],
+                'metadata' => ['original_url' => $payload['image']],
             ]);
         }
 
-        // ========== AUDIO ==========
-        if (! empty($payload['audio_url'])) {
+        // AUDIO
+        if (!empty($payload['audio'])) {
             $content->media()->create([
-                'type' => ContentTypeEnum::AUDIO,
-                'path' => $payload['audio_url'],
-                'metadata' => ['original_url' => $payload['audio_url']],
+                'type' => MediaTypeEnum::AUDIO,
+                'path' => $payload['audio'],
+                'metadata' => ['original_url' => $payload['audio']],
             ]);
         }
 
-        // ========== VIDEO (Aparat) ==========
-        if (! empty($payload['video_url'])) {
+        // VIDEO (Aparat)
+        if (!empty($payload['videoUrl'])) {
             $content->media()->create([
-                'type' => ContentTypeEnum::VIDEO,
-                'path' => $payload['video_url'],
+                'type' => MediaTypeEnum::VIDEO,
+                'path' => $payload['videoUrl'],
                 'metadata' => [
-                    'original_url' => $payload['video_url'],
+                    'original_url' => $payload['videoUrl'],
                     'service' => 'aparat',
                 ],
             ]);

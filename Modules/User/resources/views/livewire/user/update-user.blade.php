@@ -33,7 +33,7 @@
         <!-- Name -->
         <div class="space-y-1">
             <x-form.label for="name">{{ __('Name') }}</x-form.label>
-            <x-form.input type="text" wire:model="name" name="name"
+            <x-form.input type="text" wire="name" id="name"
                           class="bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-700
                                  text-gray-900 dark:text-gray-200"
                           placeholder="Your Name" />
@@ -43,7 +43,7 @@
         <!-- Email -->
         <div class="space-y-1">
             <x-form.label for="email">{{ __('Email') }}</x-form.label>
-            <x-form.input type="email" wire:model="email" name="email"
+            <x-form.input type="email" wire="email" name="email"
                           class="bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-700
                                  text-gray-900 dark:text-gray-200"
                           placeholder="you@example.com" />
@@ -53,7 +53,7 @@
         <!-- Image Upload -->
         <div class="space-y-1">
             <x-form.label for="image">{{ __('Profile Picture') }}</x-form.label>
-            <x-form.file wire:model="uploadedImage"
+            <x-form.file wire="uploadedImage"
                          class="dark:bg-gray-800 dark:border-gray-700 text-gray-200" />
             <x-form.error name="image" />
 

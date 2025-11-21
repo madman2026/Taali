@@ -37,7 +37,7 @@ class UpdateUser extends Component
 
     public function mount()
     {
-        $user = auth()->user();
+        $user = auth('web')->user();
         $this->email = $user->email;
         $this->name = $user->name;
         $this->existingImagePath = $user->image->first()?->path ?? '';
@@ -46,7 +46,7 @@ class UpdateUser extends Component
     public function updateUser()
     {
         $this->validate([
-            'email' => 'required|email|unique:users,email,'.auth()->id(),
+            'email' => 'required|email|unique:users,email,'.auth('web')->id(),
             'name' => 'required|string|max:255',
         ]);
 
@@ -70,10 +70,10 @@ class UpdateUser extends Component
             $this->email,
             $this->name
         );
-
         $response = $this->service->updateUser($data);
 
         if ($response->status) {
+            dd($response->message);
             ToastMagic::success(__('Update Successful'));
         } else {
             ToastMagic::error($response->message ?? __('Update Failed'));

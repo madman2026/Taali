@@ -4,7 +4,9 @@ namespace Modules\Content\Enums;
 
 enum ContentTypeEnum: string
 {
-    case IMAGE = 'image';
-    case AUDIO = 'audio';
-    case VIDEO = 'video';
+    case Article = 'article';
+    case Podcast = 'podcast';
+    case Video = 'video';
+    case Photographic = 'photographic';
+    case Post = 'post';
 }
