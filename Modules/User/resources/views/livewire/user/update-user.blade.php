@@ -18,10 +18,7 @@
              wire:target="uploadedImage"
              wire:loading.class="blur-sm">
 
-            @if ($uploadedImage)
-                <img class="w-24 h-24 object-cover rounded-full border border-gray-300 dark:border-gray-700 shadow-sm"
-                     src="{{ $uploadedImage->temporaryUrl() }}" alt="Preview">
-            @elseif ($existingImagePath)
+            @if($existingImagePath)
                 <img class="w-24 h-24 object-cover rounded-full border border-gray-300 dark:border-gray-700 shadow-sm"
                      src="{{ asset($existingImagePath) }}" alt="Current Avatar">
             @else
@@ -31,42 +28,17 @@
         </div>
 
         <!-- Name -->
-        <div class="space-y-1">
-            <x-form.label for="name">{{ __('Name') }}</x-form.label>
-            <x-form.input type="text" wire="name" id="name"
-                          class="bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-700
-                                 text-gray-900 dark:text-gray-200"
-                          placeholder="Your Name" />
-            <x-form.error name="name" />
-        </div>
+        <x-form.input type="text" wire="name" label="name" name="name" placeholder="{{ __('Your Name') }}" />
 
         <!-- Email -->
-        <div class="space-y-1">
-            <x-form.label for="email">{{ __('Email') }}</x-form.label>
-            <x-form.input type="email" wire="email" name="email"
-                          class="bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-700
-                                 text-gray-900 dark:text-gray-200"
-                          placeholder="you@example.com" />
-            <x-form.error name="email" />
-        </div>
+        <x-form.input type="email" wire="email" label="email" name="email" placeholder="{{ __('Your Email') }}" />
 
-        <!-- Image Upload -->
-        <div class="space-y-1">
-            <x-form.label for="image">{{ __('Profile Picture') }}</x-form.label>
-            <x-form.file wire="uploadedImage"
-                         class="dark:bg-gray-800 dark:border-gray-700 text-gray-200" />
-            <x-form.error name="image" />
-
-            <div wire:loading wire:target="uploadedImage"
-                 class="text-gray-500 dark:text-gray-400 mt-1 text-sm">
-                {{ __('Uploading...') }}
-            </div>
-        </div>
+        <x-form.file accept="image/*" label="{{ __('Profile Picture') }}" name="uploadedImage" placeholder="{{ __('Profile Picture') }}" />
 
         <!-- Submit Button -->
-        <x-button-primary type="submit" class="w-full py-2.5 text-sm">
+        <x-form.button type="submit" variant="primary" class="w-full py-2.5 text-sm">
             {{ __('Update Profile') }}
-        </x-button-primary>
+        </x-form.button>
 
     </form>
 </div>

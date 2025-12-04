@@ -5,18 +5,12 @@
 
     <form wire:submit.prevent="login" class="space-y-4">
 
-        <div>
-            <x-form.label for="email">{{ __('Email') }}</x-form.label>
-            <x-form.input type="email" wire="email" name="email" placeholder="{{ __('Email') }}" />
-            <x-form.error name="email" />
-        </div>
+        <x-form.input type="email" label="email" name="email" placeholder="{{ __('Your Email') }}" />
 
-        <div>
-            <x-form.label for="Password">{{ __('password') }}</x-form.label>
-            <x-form.input type="password" wire="password" name="Password" placeholder="{{ __('password') }}" />
-            <x-form.error name="password" />
-        </div>
+        <x-form.input type="password" label="password" name="password" placeholder="{{ __('Your Password') }}" />
 
-        <x-button-primary type="submit">{{ __('Login') }}</x-button-primary>
+        <x-form.button type="submit" variant="primary" class="w-full py-2.5 text-sm">
+            {{ __('Login') }}
+        </x-form.button>
     </form>
 </div>

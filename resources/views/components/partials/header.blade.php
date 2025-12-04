@@ -1,7 +1,7 @@
 <header class="border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#111] text-gray-900 dark:text-gray-100 transition-colors duration-300 shadow-sm">
     <div class="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
 
-        <h1 class="text-lg font-semibold tracking-tight">{{ $title ?? 'صفحه' }}</h1>
+        <a href="{{ url('/') }}" class="text-lg font-semibold tracking-tight">{{ __('Home') }}</a>
 
         <div class="flex items-center gap-3">
 
@@ -26,7 +26,7 @@
                          x-transition:leave="transition ease-in duration-150"
                          x-transition:leave-start="opacity-100 scale-100"
                          x-transition:leave-end="opacity-0 scale-95"
-                         class="absolute right-0 mt-2 w-56 bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800/70 rounded-2xl shadow-xl divide-y divide-gray-100 dark:divide-gray-800/70 z-50 overflow-hidden">
+                         class="absolute -right-16 mt-2 w-56 bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800/70 rounded-2xl shadow-xl divide-y divide-gray-100 dark:divide-gray-800/70 z-50 overflow-hidden">
 
                         <ul class="py-2 text-gray-700 dark:text-gray-200 text-sm">
                             <li>

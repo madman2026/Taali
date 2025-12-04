@@ -46,39 +46,47 @@ class UpdateUser extends Component
     public function updateUser()
     {
         $this->validate([
-            'email' => 'required|email|unique:users,email,'.auth('web')->id(),
-            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . auth('web')->id(),
+            'name'  => 'required|string|max:255',
+            'uploadedImage' => 'nullable|image|mimes:jpeg,jpg,png|max:5000',
         ]);
 
+        $user = Auth::user();
+
+        // Handle Image Upload
         if ($this->uploadedImage) {
+
+            // Delete old image if exists
+            if ($user->image()->exists()) {
+                $user->image()->delete();
+            }
+
+            // Store new
             $path = $this->uploadedImage->store('profile-pictures', 'public');
+
+            // Create new image record
+            $userImage = $user->image()->create([
+                'path'      => $path,
+                'type'      => MediaTypeEnum::IMAGE,
+                'mime_type' => $this->uploadedImage->getMimeType(),
+            ]);
         }
 
-        $userImage = Auth::user()->image()->createOrFirst(
-            [
-                'path' => $this->existingImagePath,
-            ]
-        );
-        if (isset($path)) {
-            $userImage->path = $path;
-        }
-        $userImage->type = MediaTypeEnum::IMAGE;
-        $userImage->mime_type = $this->uploadedImage ? $this->uploadedImage->getMimeType() : $userImage->mime_type;
-        $userImage->save();
-
+        // Update user basic fields
         $data = new UpdateUserData(
             $this->email,
             $this->name
         );
+
         $response = $this->service->updateUser($data);
 
         if ($response->status) {
-            dd($response->message);
-            ToastMagic::success(__('Update Successful'));
+            $this->dispatch('toastMagic', status:'success', title:__("success"), message:__('Update Successful'));
         } else {
-            ToastMagic::error($response->message ?? __('Update Failed'));
+            $this->dispatch('toastMagic', status:'error', title:__("error"), message:$response->message ?? __('Update Failed'));
         }
     }
+
 
     public function render()
     {

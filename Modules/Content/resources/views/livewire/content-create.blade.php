@@ -6,104 +6,33 @@
 
     <form wire:submit.prevent="save" class="space-y-6">
 
-        <!-- Title -->
-        <div class="space-y-1">
-            <x-form.label for="title">{{ __('Title') }}</x-form.label>
-            <x-form.input type="text" wire="title" id="title"
-                class="bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-700
-                       text-gray-900 dark:text-gray-100"
-                placeholder="{{ __('Enter title') }}" />
-            <x-form.error name="title" />
-        </div>
+        <x-form.input type="text" label="title" name="title" placeholder="{{ __('Enter title') }}" />
 
-        <!-- Excerpt -->
-        <div class="space-y-1">
-            <x-form.label for="excerpt">{{ __('Excerpt') }}</x-form.label>
-            <textarea
-                wire="excerpt"
-                id="excerpt"
-                rows="5"
-                class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700
-                       text-gray-900 dark:text-gray-100 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
-                placeholder="{{ __('Full excerpt or content body') }}"></textarea>
-            <x-form.error name="excerpt" />
-        </div>
+        <x-form.textarea label="excerpt" name="excerpt" placeholder="{{ __('Full excerpt or content body') }}" />
 
-        <!-- Description -->
-        <div class="space-y-1">
-            <x-form.label for="description">{{ __('Description') }}</x-form.label>
-            <textarea
-                wire="description"
-                id="description"
-                rows="5"
-                class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700
-                       text-gray-900 dark:text-gray-100 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
-                placeholder="{{ __('Full description or content body') }}"></textarea>
-            <x-form.error name="description" />
-        </div>
+        <x-form.textarea label="description" name="description" placeholder="{{ __('Full description or content body') }}" />
 
-        <!-- Image -->
-        <div class="space-y-1">
-            <x-form.label for="image">{{ __('Image') }}</x-form.label>
-            <x-form.file wire="image" id="image"
-                class="bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-700
-                       text-gray-900 dark:text-gray-100" />
-            <x-form.error name="image" />
+        <x-form.file label="image" name="image" placeholder="{{ __('Image') }}" accept="image/*" />
 
-            @if($image)
-                <div class="mt-2">
-                    <img src="{{ $image->temporaryUrl() }}" alt="Preview"
-                        class="w-32 h-32 object-cover rounded-lg border border-gray-300 dark:border-gray-700 shadow-sm" />
-                </div>
-            @endif
-        </div>
+        <x-form.file label="audio" name="audio" placeholder="{{ __('Audio File') }}" accept="audio/*" />
 
-        <!-- Audio -->
-        <div class="space-y-1">
-            <x-form.label for="audio">{{ __('Audio File') }}</x-form.label>
-            <x-form.file wire="audio" id="audio" accept="audio/*"
-                class="bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-700
-                       text-gray-900 dark:text-gray-100" />
-            <x-form.error name="audio" />
-
-            @if($audio)
-                <div class="mt-2">
-                    <audio controls class="w-full">
-                        <source src="{{ $audio->temporaryUrl() }}">
-                        {{ __('Your browser does not support the audio element.') }}
-                    </audio>
-                </div>
-            @endif
-        </div>
-
+        <x-form.input type="text" label="videoUrl" name="videoUrl" placeholder="{{ __('Video URL') }}" />
         <!-- Video URL -->
-        <div class="space-y-1">
-            <x-form.label for="video">{{ __('Video URL') }}</x-form.label>
-            <x-form.input type="text" wire="videoUrl" id="videoUrl"
-                class="bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-700
-                    text-gray-900 dark:text-gray-100"
-                placeholder="لینک آپارات یا hash مثل tvj5j1e" />
-            <x-form.error name="videoUrl" />
-
-            @if($videoHash)
-                <div class="mt-3 rounded-xl overflow-hidden border border-gray-300 dark:border-gray-700 shadow">
-                    <div class="relative pb-[57%] h-0">
-                        <iframe
-                            class="absolute top-0 left-0 w-full h-full"
-                            src="https://www.aparat.com/video/video/embed/videohash/{{ $videoHash }}/vt/frame"
-                            allowfullscreen webkitallowfullscreen mozallowfullscreen>
-                        </iframe>
-                    </div>
+        @if($videoHash)
+            <div class="mt-3 rounded-xl overflow-hidden border border-gray-300 dark:border-gray-700 shadow">
+                <div class="relative pb-[57%] h-0">
+                    <iframe
+                        class="absolute top-0 left-0 w-full h-full"
+                        src="https://www.aparat.com/video/video/embed/videohash/{{ $videoHash }}/vt/frame"
+                        allowfullscreen webkitallowfullscreen mozallowfullscreen>
+                    </iframe>
                 </div>
-            @endif
-        </div>
+            </div>
+        @endif
 
-        <!-- Submit -->
-        <div class="pt-4">
-            <x-button-primary type="submit" class="w-full py-3 text-lg">
-                {{ __('Create Content') }}
-            </x-button-primary>
-        </div>
+        <x-form.button type="submit" variant="primary" class="w-full py-2.5 text-sm">
+            {{ __('Create Content') }}
+        </x-form.button>
 
     </form>
 </div>
