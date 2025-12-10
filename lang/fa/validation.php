@@ -156,7 +156,9 @@ return [
     'url' => ':Attribute معتبر نمی‌باشد.',
     'uuid' => ':Attribute باید یک UUID معتبر باشد.',
     'attributes' => [
-        'New password' => 'رمز عبور جدید',
+
+        'newPassword' => 'رمز عبور جدید',
+        'oldPassword' => 'رمز عبور قدیمی',
         'address' => 'نشانی',
         'affiliate_url' => 'URL وابسته',
         'age' => 'سن',

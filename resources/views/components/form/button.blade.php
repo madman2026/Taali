@@ -66,7 +66,7 @@
             <span class="shrink-0">{!! $icon !!}</span>
         @endif
 
-        <span>{{ $slot }}</span>
+        <span class="flex gap-2">{{ $slot }}</span>
     </a>
 @else
     <button

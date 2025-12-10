@@ -3,6 +3,13 @@
 
         <a href="{{ url('/') }}" class="text-lg font-semibold tracking-tight">{{ __('Home') }}</a>
 
+        <div>
+            <x-form.button :href="route('about')" variant="link">{{ __('About Us')}}</x-form.button>
+            <x-form.button :href="route('contact')" variant="link">{{ __('Contact Us')}}</x-form.button>
+            <x-form.button :href="route('search')" variant="link">{{ __('Search')}}</x-form.button>
+            <x-form.button :href="route('content.index')" variant="link">{{ __('Contents')}}</x-form.button>
+        </div>
+
         <div class="flex items-center gap-3">
 
             @auth

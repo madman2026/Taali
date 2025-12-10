@@ -4,25 +4,9 @@
 
     <form wire:submit.prevent="resetPassword" class="space-y-4">
 
-        <div>
-            <x-form.label for="oldPassword">{{ __('Old Password') }}</x-form.label>
-            <x-form.input type="password" wire="oldPassword" name="oldPassword" placeholder="{{ __('Your Old Password') }}" />
-            <x-form.error name="oldPassword" />
-        </div>
-
-        <div>
-            <x-form.label for="newPassword">{{ __('New Password') }}</x-form.label>
-            <x-form.input type="password" wire="newPassword" name="newPassword" placeholder="{{ __('Your New Password') }}" />
-            <x-form.error name="newPassword" />
-        </div>
-
-        <div>
-            <x-form.label for="newPassword_confirmation">{{ __('Password Confirmation') }}</x-form.label>
-            <x-form.input type="password" wire="newPassword_confirmation" name="newPassword_confirmation" placeholder="{{ __('Your New Password Again') }}" />
-            <x-form.error name="newPassword_confirmation" />
-
-        </div>
-
-        <x-button-primary type="submit">{{ __('Update Profile') }}</x-button-primary>
+        <x-form.input :label="__('Old Password')" name="oldPassword" type="password" :placeholder="__('Your Old Password')"  />
+        <x-form.input :label="__('New Password')" name="newPassword" type="password" :placeholder="__('Your New Password')"  />
+        <x-form.input :label="__('New Password Confirmation')" type="password" name="newPassword_confirmation" :placeholder="__('Confirm Your New Password')"  />
+        <x-form.button type="submit">{{ __('Update Profile') }}</x-button>
     </form>
 </div>

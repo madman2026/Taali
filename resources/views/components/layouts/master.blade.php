@@ -12,6 +12,7 @@
         transition-all duration-300
         overflow-hidden
     ">
+        <x-back-page class="absolute right-0 top-0 mb-3"/>
         {{ $slot }}
     </main>
 </x-layouts.app>
