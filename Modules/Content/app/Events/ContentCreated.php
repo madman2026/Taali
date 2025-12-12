@@ -12,11 +12,8 @@ class ContentCreated
 
     public $content;
 
-    public $mediaData;
-
-    public function __construct(Content $content, array $mediaData = [])
+    public function __construct(Content $content)
     {
         $this->content = $content;
-        $this->mediaData = $mediaData;
     }
 }

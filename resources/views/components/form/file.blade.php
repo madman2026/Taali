@@ -83,14 +83,39 @@
                 @endphp
 
                 @foreach($files as $file)
-                    @if($file instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile)
-                        <img src="{{ $file->temporaryUrl() }}" class="max-h-40 rounded-md" />
-                    @elseif(is_string($file))
-                        <img src="{{ $file }}" class="max-h-40 rounded-md" />
+                    @php
+                        $url = $file instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile
+                            ? $file->temporaryUrl()
+                            : (is_string($file) ? $file : null);
+
+                        $extension = '';
+                        if ($file instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile) {
+                            $extension = strtolower($file->getClientOriginalExtension());
+                        } elseif (is_string($file)) {
+                            $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                        }
+
+                        $isImage = in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+                        $isAudio = in_array($extension, ['mp3', 'wav', 'ogg', 'm4a']);
+                    @endphp
+
+                    @if($url)
+                        @if($isImage)
+                            <img src="{{ $url }}" class="max-h-40 rounded-md" />
+                        @elseif($isAudio)
+                            <audio
+                                controls
+                                class="w-full max-w-xs mt-2 border border-gray-300 dark:border-gray-600 rounded-lg p-2 bg-gray-100 dark:bg-gray-700"
+                            >
+                                <source src="{{ $url }}" type="audio/{{ $extension }}">
+                                مرورگرت از پخش صوت پشتیبانی نمیکند.
+                            </audio>
+                        @endif
                     @endif
                 @endforeach
             </div>
         @endif
+
 
         <!-- Error -->
         @error($name)

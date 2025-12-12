@@ -11,6 +11,7 @@ use Modules\Content\Enums\ContentTypeEnum;
 use Modules\Interaction\Models\Comment;
 use Modules\Interaction\Models\Like;
 use Modules\Interaction\Models\View;
+use Modules\Media\Enums\MediaTypeEnum;
 use Modules\Media\Models\Media;
 use RalphJSmit\Laravel\SEO\Support\HasSEO;
 
@@ -18,11 +19,8 @@ use RalphJSmit\Laravel\SEO\Support\HasSEO;
 
 class Content extends Model
 {
-    use HasFactory , HasSEO , HasSlug;
+    use HasFactory, HasSEO, HasSlug;
 
-    /**
-     * The attributes that are mass assignable.
-     */
     protected $fillable = [
         'slug',
         'user_id',
@@ -35,52 +33,63 @@ class Content extends Model
     ];
 
     protected $casts = [
-        'published_at',
+        'published_at' => 'datetime',
         'type' => ContentTypeEnum::class,
     ];
 
-    /**
-     * @return BelongsTo<\Modules\User\Models\User, Content>
-     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(\Modules\User\Models\User::class);
     }
 
-    /**
-     * @return HasMany<Media>
-     */
-    public function media(): HasMany
+    public function media()
     {
-        return $this->hasMany(Media::class);
+        return $this->morphMany(Media::class, 'mediable');
     }
 
-    /**
-     * @return HasMany<View>
-     */
+    public function image()
+    {
+        return $this->morphOne(Media::class, 'mediable')
+                    ->where('type', MediaTypeEnum::IMAGE->value);
+    }
+
+    public function audio()
+    {
+        return $this->morphOne(Media::class, 'mediable')
+                    ->where('type', MediaTypeEnum::AUDIO->value);
+    }
+
+    public function video()
+    {
+        return $this->morphOne(Media::class, 'mediable')
+                    ->where('type', MediaTypeEnum::VIDEO->value);
+    }
+
     public function views(): HasMany
     {
         return $this->hasMany(View::class);
     }
 
-    /**
-     * @return HasMany<Like>
-     */
     public function likes(): HasMany
     {
         return $this->hasMany(Like::class);
     }
 
-    /**
-     * @return HasMany<Comment>
-     */
-    public function comments(): HasMany
+    public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->morphMany(Comment::class , 'commentable');
     }
 
-    // protected static function newFactory(): ContentFactory
-    // {
-    //     // return ContentFactory::new();
-    // }
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    public function scopePublished($query)
+    {
+        return $query->where('is_published', true)
+                     ->whereNotNull('published_at')
+                     ->where('published_at', '<=', now());
+    }
 }
+

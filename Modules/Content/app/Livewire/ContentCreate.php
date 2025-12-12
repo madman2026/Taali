@@ -54,19 +54,22 @@ class ContentCreate extends Component
 
     public function save()
     {
-        $this->validate();
+        $data = $this->validate();
+        if ($this->image)
+        {
+            $data['image'] = $this->image->store('contents/images');
+        }
 
-        $result = $this->service->create(
-            payload: [
-                'title' => $this->title,
-                'excerpt' => $this->excerpt,
-                'description' => $this->description,
-                'user_id' => auth('web')->id(),
-                'image_url' => $this->image,
-                'audio_url' => $this->audio,
-                'video_url' => $this->videoUrl,
-            ]
-        );
+        if ($this->audio)
+        {
+            $data['audio'] = $this->audio->store('contents/audios');
+        }
+        if ($this->videoUrl)
+        {
+            $data['videoUrl'] = $this->videoHash;
+        }
+        $result = $this->service->create($data);
+
         if ($result->status){
             ToastMagic::success(__('Content created and queued for processing!'));
             return $this->redirectRoute('content.index');

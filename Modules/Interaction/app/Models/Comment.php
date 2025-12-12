@@ -18,8 +18,10 @@ class Comment extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
-        'content_id',
+        'commentable_id',
+        'commentable_type',
         'user_id',
+        'comment_id',
         'ip_address',
         'title',
         'body',

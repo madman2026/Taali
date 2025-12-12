@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('status')->nullable();
             $table->string('name')->nullable();
             $table->string('path')->nullable();
-            $table->string('disk')->default('public')->nullable();
+            $table->string('disk')->default('local')->nullable();
             $table->string('type')->default('image')->nullable();
             $table->string('mime_type')->nullable();
             $table->unsignedBigInteger('size')->nullable();

@@ -2,6 +2,8 @@
 
 namespace Modules\Content\Actions;
 
+use Modules\Content\Enums\ContentStatus;
+use Modules\Content\Enums\ContentStatusType;
 use Modules\Content\Enums\ContentTypeEnum;
 use Modules\Content\Events\ContentCreated;
 use Modules\Content\Models\Content;
@@ -11,9 +13,7 @@ class ContentCreateAction
 {
     public function handle(array $payload): Content
     {
-        // تشخیص نوع محتوا با آرایه و فیلتر
         $flags = [
-            'text' => !empty($payload['title']) || !empty($payload['excerpt']) || !empty($payload['description']),
             'image' => !empty($payload['image'] ?? null),
             'audio' => !empty($payload['audio'] ?? null),
             'video' => !empty($payload['videoUrl'] ?? null) || !empty($payload['videoHash'] ?? null),
@@ -22,34 +22,31 @@ class ContentCreateAction
         $activeTypes = array_filter($flags);
 
         $type = match(count($activeTypes)) {
-            default => ContentTypeEnum::Post, // چند نوع محتوا همزمان
+            default => ContentTypeEnum::Post,
+            0 => ContentTypeEnum::Article,
             1 => match (key($activeTypes)) {
-                'text' => ContentTypeEnum::Article,
                 'image' => ContentTypeEnum::Photographic,
                 'audio' => ContentTypeEnum::Podcast,
                 'video' => ContentTypeEnum::Video,
             },
         };
 
-        // ذخیره محتوا
         $content = Content::create([
             'title' => $payload['title'],
             'excerpt' => $payload['excerpt'],
             'description' => $payload['description'] ?? null,
-            'user_id' => $payload['user_id'],
+            'user_id' => auth('web')->id(),
             'type' => $type->value,
         ]);
 
         $this->storeMedia($content, $payload);
-
         ContentCreated::dispatch($content);
 
-        return $content;
+        return $content->load(['user' , 'image' , 'audio']);
     }
 
     private function storeMedia(Content $content, array $payload): void
     {
-        // IMAGE
         if (!empty($payload['image'])) {
             $content->media()->create([
                 'type' => MediaTypeEnum::IMAGE,
@@ -58,7 +55,6 @@ class ContentCreateAction
             ]);
         }
 
-        // AUDIO
         if (!empty($payload['audio'])) {
             $content->media()->create([
                 'type' => MediaTypeEnum::AUDIO,
@@ -67,14 +63,13 @@ class ContentCreateAction
             ]);
         }
 
-        // VIDEO (Aparat)
         if (!empty($payload['videoUrl'])) {
             $content->media()->create([
                 'type' => MediaTypeEnum::VIDEO,
                 'path' => $payload['videoUrl'],
                 'metadata' => [
                     'original_url' => $payload['videoUrl'],
-                    'service' => 'aparat',
+                    'service' => 'aparat'
                 ],
             ]);
         }
