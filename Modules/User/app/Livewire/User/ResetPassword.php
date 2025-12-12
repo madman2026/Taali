@@ -2,12 +2,12 @@
 
 namespace Modules\User\Livewire\User;
 
+use Devrabiul\ToastMagic\Facades\ToastMagic;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
-use Devrabiul\ToastMagic\Facades\ToastMagic;
 use Modules\User\Services\UserService;
 
 #[Layout('components.layouts.master')]

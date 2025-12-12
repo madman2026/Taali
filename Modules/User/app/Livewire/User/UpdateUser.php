@@ -8,7 +8,6 @@ use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Devrabiul\ToastMagic\Facades\ToastMagic;
 use Modules\Media\Enums\MediaTypeEnum;
 use Modules\User\Contracts\UpdateUserData;
 use Modules\User\Services\UserService;
@@ -46,8 +45,8 @@ class UpdateUser extends Component
     public function updateUser()
     {
         $this->validate([
-            'email' => 'required|email|unique:users,email,' . auth('web')->id(),
-            'name'  => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,'.auth('web')->id(),
+            'name' => 'required|string|max:255',
             'uploadedImage' => 'nullable|image|mimes:jpeg,jpg,png|max:5000',
         ]);
 
@@ -66,8 +65,8 @@ class UpdateUser extends Component
 
             // Create new image record
             $userImage = $user->image()->create([
-                'path'      => $path,
-                'type'      => MediaTypeEnum::IMAGE,
+                'path' => $path,
+                'type' => MediaTypeEnum::IMAGE,
                 'mime_type' => $this->uploadedImage->getMimeType(),
             ]);
         }
@@ -81,12 +80,11 @@ class UpdateUser extends Component
         $response = $this->service->updateUser($data);
 
         if ($response->status) {
-            $this->dispatch('toastMagic', status:'success', title:__("success"), message:__('Update Successful'));
+            $this->dispatch('toastMagic', status: 'success', title: __('success'), message: __('Update Successful'));
         } else {
-            $this->dispatch('toastMagic', status:'error', title:__("error"), message:$response->message ?? __('Update Failed'));
+            $this->dispatch('toastMagic', status: 'error', title: __('error'), message: $response->message ?? __('Update Failed'));
         }
     }
-
 
     public function render()
     {

@@ -2,10 +2,10 @@
 
 namespace Modules\Content\Livewire;
 
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Livewire\Attributes\Title;
-use Livewire\Attributes\Layout;
 use Modules\Content\Models\Content;
 
 #[Layout('components.layouts.master')]
@@ -15,11 +15,12 @@ class ContentIndex extends Component
     use WithPagination;
 
     public string $search = '';
+
     public string $type = 'all';
 
     protected $queryString = [
         'search' => ['except' => ''],
-        'type'   => ['except' => 'all'],
+        'type' => ['except' => 'all'],
     ];
 
     public function updatingSearch()
@@ -43,12 +44,10 @@ class ContentIndex extends Component
     public function getContentsProperty()
     {
         return Content::query()
-            ->when($this->search, fn($q) =>
-                $q->where('title', 'like', "%{$this->search}%")
-                  ->orWhere('slug', 'like', "%{$this->search}%")
+            ->when($this->search, fn ($q) => $q->where('title', 'like', "%{$this->search}%")
+                ->orWhere('slug', 'like', "%{$this->search}%")
             )
-            ->when($this->type !== 'all', fn($q) =>
-                $q->where('type', $this->type)
+            ->when($this->type !== 'all', fn ($q) => $q->where('type', $this->type)
             )
             ->latest()
             ->paginate(10);

@@ -2,17 +2,18 @@
 
 namespace Modules\Content\Listeners;
 
+use getID3;
+use getid3_lib;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
-use getID3;
-use getid3_lib;
 
 class ProcessContentMedia implements ShouldQueue
 {
     protected $disk;
+
     protected $imageManager;
 
     public function __construct()
@@ -40,7 +41,7 @@ class ProcessContentMedia implements ShouldQueue
                 }
                 $media->status = \Modules\Content\Enums\ContentStatusEnum::PROCCESSED->value;
             } catch (\Throwable $e) {
-                Log::error("Media processing failed for {$media->type}: " . $e->getMessage());
+                Log::error("Media processing failed for {$media->type}: ".$e->getMessage());
                 $media->status = \Modules\Content\Enums\ContentStatusEnum::FAILED->value;
             }
             $media->save();
@@ -49,7 +50,7 @@ class ProcessContentMedia implements ShouldQueue
 
     protected function processImageMedia($media)
     {
-        if (!$this->disk->exists($media->path)) {
+        if (! $this->disk->exists($media->path)) {
             throw new \Exception("Image not found: {$media->path}");
         }
 
@@ -57,17 +58,17 @@ class ProcessContentMedia implements ShouldQueue
 
         // Resize if too large
         if ($img->width() > 3840 || $img->height() > 2160) {
-            $img->resize(3840, 2160, fn($c) => $c->aspectRatio()->upsize());
+            $img->resize(3840, 2160, fn ($c) => $c->aspectRatio()->upsize());
         }
 
         // Encode & save optimized
         $encoded = $img->encode('jpg', 80);
-        $this->disk->put($media->path, (string)$encoded);
+        $this->disk->put($media->path, (string) $encoded);
 
         // Create thumbnail
-        $thumbPath = dirname($media->path) . "/thumb_" . basename($media->path);
+        $thumbPath = dirname($media->path).'/thumb_'.basename($media->path);
         $thumb = $this->imageManager->make($this->disk->get($media->path))->fit(300, 300)->encode('jpg', 75);
-        $this->disk->put($thumbPath, (string)$thumb);
+        $this->disk->put($thumbPath, (string) $thumb);
 
         $media->metadata = [
             'width' => $img->width(),
@@ -78,14 +79,14 @@ class ProcessContentMedia implements ShouldQueue
 
     protected function processAudioMedia($media)
     {
-        if (!$this->disk->exists($media->path)) {
+        if (! $this->disk->exists($media->path)) {
             throw new \Exception("Audio not found: {$media->path}");
         }
 
         $tmp = tempnam(sys_get_temp_dir(), 'aud_');
         file_put_contents($tmp, $this->disk->get($media->path));
 
-        $getID3 = new getID3();
+        $getID3 = new getID3;
         $info = $getID3->analyze($tmp);
         getid3_lib::CopyTagsToComments($info);
 
@@ -99,30 +100,30 @@ class ProcessContentMedia implements ShouldQueue
             FFMpeg::fromDisk('public')
                 ->open($media->path)
                 ->export()
-                ->inFormat(new \FFMpeg\Format\Audio\Mp3())
+                ->inFormat(new \FFMpeg\Format\Audio\Mp3)
                 ->save($finalPath);
         } catch (\Throwable $e) {
-            Log::warning("FFMpeg failed, keeping original: ".$e->getMessage());
+            Log::warning('FFMpeg failed, keeping original: '.$e->getMessage());
         }
 
         $media->metadata = [
             'duration' => $duration,
-            'bitrate'  => $bitrate,
-            'sample'   => $sample,
-            'size'     => $this->disk->size($media->path),
+            'bitrate' => $bitrate,
+            'sample' => $sample,
+            'size' => $this->disk->size($media->path),
         ];
     }
 
     protected function processVideoMedia($media)
     {
         // For Aparat: only the hash is stored; you can fetch metadata if needed
-        if (!empty($media->path)) {
+        if (! empty($media->path)) {
             $media->metadata = [
                 'service' => 'aparat',
-                'hash'    => $media->path,
+                'hash' => $media->path,
             ];
         } else {
-            throw new \Exception("Video hash is missing");
+            throw new \Exception('Video hash is missing');
         }
     }
 }

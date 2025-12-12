@@ -3,12 +3,10 @@
 namespace Modules\Content\Actions;
 
 use App\Contracts\HasAparatUrl;
-use Illuminate\Support\Facades\Storage;
+use Modules\Content\Enums\ContentStatusEnum;
 use Modules\Content\Events\ContentCreated;
 use Modules\Content\Models\Content;
-use Modules\Content\Enums\ContentStatusEnum;
 use Modules\Media\Enums\MediaTypeEnum;
-use Modules\Content\Listeners\ProcessContentMedia;
 
 class UpdateContentAction
 {
@@ -20,8 +18,8 @@ class UpdateContentAction
         // 1) Update text fields
         // ---------------------------
         $content->fill([
-            'title'       => $data['title'] ?? $content->title,
-            'excerpt'     => $data['excerpt'] ?? $content->excerpt,
+            'title' => $data['title'] ?? $content->title,
+            'excerpt' => $data['excerpt'] ?? $content->excerpt,
             'description' => $data['description'] ?? $content->description,
         ]);
         $content->save();
@@ -30,26 +28,26 @@ class UpdateContentAction
         // 2) Handle media
         // ---------------------------
         // IMAGE
-        if (!empty($data['image'])) {
-            $path = $data['image']->store('contents/images/' . now()->format('Ymd'), 'public');
+        if (! empty($data['image'])) {
+            $path = $data['image']->store('contents/images/'.now()->format('Ymd'), 'public');
             $content->media()->updateOrCreate(
                 ['type' => MediaTypeEnum::IMAGE->value],
                 [
-                    'path'   => $path,
-                    'disk'   => 'public',
+                    'path' => $path,
+                    'disk' => 'public',
                     'status' => ContentStatusEnum::PROCCESSING->value,
                 ]
             );
         }
 
         // AUDIO
-        if (!empty($data['audio'])) {
-            $path = $data['audio']->store('contents/audios/' . now()->format('Ymd'), 'public');
+        if (! empty($data['audio'])) {
+            $path = $data['audio']->store('contents/audios/'.now()->format('Ymd'), 'public');
             $content->media()->updateOrCreate(
                 ['type' => MediaTypeEnum::AUDIO->value],
                 [
-                    'path'   => $path,
-                    'disk'   => 'public',
+                    'path' => $path,
+                    'disk' => 'public',
                     'status' => ContentStatusEnum::PROCCESSING->value,
                 ]
             );
@@ -61,8 +59,8 @@ class UpdateContentAction
             $content->media()->updateOrCreate(
                 ['type' => MediaTypeEnum::VIDEO->value],
                 [
-                    'path'     => $hash,
-                    'status'   => ContentStatusEnum::PROCCESSING->value,
+                    'path' => $hash,
+                    'status' => ContentStatusEnum::PROCCESSING->value,
                     'metadata' => $hash ? ['service' => 'aparat'] : null,
                 ]
             );

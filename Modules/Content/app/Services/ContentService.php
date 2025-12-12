@@ -9,7 +9,7 @@ use Modules\Content\Models\Content;
 
 class ContentService extends BaseService
 {
-    public function __construct(private ContentCreateAction $createAction , private UpdateContentAction $updateAction) {}
+    public function __construct(private ContentCreateAction $createAction, private UpdateContentAction $updateAction) {}
 
     public function index() {}
 
@@ -17,9 +17,9 @@ class ContentService extends BaseService
 
     public function delete() {}
 
-    public function update(Content $content , array $data)
+    public function update(Content $content, array $data)
     {
-        return $this->execute(fn () => $this->updateAction->handle($content , $data));
+        return $this->execute(fn () => $this->updateAction->handle($content, $data));
     }
 
     public function create(array $payload)

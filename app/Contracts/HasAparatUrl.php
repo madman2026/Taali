@@ -6,7 +6,7 @@ trait HasAparatUrl
 {
     public function extractAparatHash(?string $url): ?string
     {
-        if (!$url) {
+        if (! $url) {
             return null;
         }
 
@@ -44,5 +44,4 @@ trait HasAparatUrl
 
         return null;
     }
-
 }

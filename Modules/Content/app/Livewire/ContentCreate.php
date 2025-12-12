@@ -2,11 +2,11 @@
 
 namespace Modules\Content\Livewire;
 
-use Livewire\Attributes\Validate;
-use Livewire\Component;
 use Devrabiul\ToastMagic\Facades\ToastMagic;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\Validate;
+use Livewire\Component;
 use Livewire\WithFileUploads;
 use Modules\Content\Services\ContentService;
 
@@ -55,26 +55,24 @@ class ContentCreate extends Component
     public function save()
     {
         $data = $this->validate();
-        if ($this->image)
-        {
+        if ($this->image) {
             $data['image'] = $this->image->store('contents/images');
         }
 
-        if ($this->audio)
-        {
+        if ($this->audio) {
             $data['audio'] = $this->audio->store('contents/audios');
         }
-        if ($this->videoUrl)
-        {
+        if ($this->videoUrl) {
             $data['videoUrl'] = $this->videoHash;
         }
         $result = $this->service->create($data);
 
-        if ($result->status){
+        if ($result->status) {
             ToastMagic::success(__('Content created and queued for processing!'));
+
             return $this->redirectRoute('content.index');
 
-        }else{
+        } else {
             ToastMagic::error(__('Something Wen Wrong!'));
         }
     }

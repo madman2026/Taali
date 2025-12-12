@@ -10,20 +10,28 @@ use Modules\Content\Services\ContentService;
 
 class ContentUpdate extends Component
 {
-    use WithFileUploads, HasAparatUrl;
+    use HasAparatUrl, WithFileUploads;
 
     public Content $content;
+
     protected ContentService $service;
 
     public $title;
+
     public $excerpt;
+
     public $description;
+
     public $videoUrl;
+
     public $image = null;
+
     public $audio = null;
+
     public $videoHash;
 
     public $currentImage;
+
     public $currentAudio;
 
     protected $rules = [
@@ -58,8 +66,7 @@ class ContentUpdate extends Component
     public function updated($property)
     {
         $this->validateOnly($property);
-        if ($property == 'videoUrl')
-        {
+        if ($property == 'videoUrl') {
             $this->videoHash = $this->extractAparatHash($this->videoUrl);
         }
 
@@ -82,11 +89,10 @@ class ContentUpdate extends Component
         $result = $this->service->update($this->content, $data);
 
         if ($result->status ?? false) {
-            $this->dispatch('toastMagic', status:'success', title:'انجام شد!', message:'در صف پردازش قرار گرفت!');
+            $this->dispatch('toastMagic', status: 'success', title: 'انجام شد!', message: 'در صف پردازش قرار گرفت!');
         } else {
-            $this->dispatch('toastMagic', status:'error', title:'خطا!', message:'مشکلی پیش آمد!');
+            $this->dispatch('toastMagic', status: 'error', title: 'خطا!', message: 'مشکلی پیش آمد!');
         }
-
 
         return $this->redirectRoute('home');
     }

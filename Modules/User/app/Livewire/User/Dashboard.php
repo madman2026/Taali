@@ -2,6 +2,7 @@
 
 namespace Modules\User\Livewire\User;
 
+use Devrabiul\ToastMagic\Facades\ToastMagic;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -10,7 +11,6 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Component;
-use Devrabiul\ToastMagic\Facades\ToastMagic;
 use Throwable;
 
 #[Layout('components.layouts.master')]

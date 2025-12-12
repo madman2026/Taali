@@ -50,19 +50,19 @@ class Content extends Model
     public function image()
     {
         return $this->morphOne(Media::class, 'mediable')
-                    ->where('type', MediaTypeEnum::IMAGE->value);
+            ->where('type', MediaTypeEnum::IMAGE->value);
     }
 
     public function audio()
     {
         return $this->morphOne(Media::class, 'mediable')
-                    ->where('type', MediaTypeEnum::AUDIO->value);
+            ->where('type', MediaTypeEnum::AUDIO->value);
     }
 
     public function video()
     {
         return $this->morphOne(Media::class, 'mediable')
-                    ->where('type', MediaTypeEnum::VIDEO->value);
+            ->where('type', MediaTypeEnum::VIDEO->value);
     }
 
     public function views(): HasMany
@@ -77,7 +77,7 @@ class Content extends Model
 
     public function comments()
     {
-        return $this->morphMany(Comment::class , 'commentable');
+        return $this->morphMany(Comment::class, 'commentable');
     }
 
     public function getRouteKeyName()
@@ -88,8 +88,7 @@ class Content extends Model
     public function scopePublished($query)
     {
         return $query->where('is_published', true)
-                     ->whereNotNull('published_at')
-                     ->where('published_at', '<=', now());
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now());
     }
 }
-

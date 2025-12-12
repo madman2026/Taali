@@ -8,4 +8,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('media', MediaController::class)->names('media');
 });
 
-Route::get('/media/view/{id}' , DownloadController::class)->middleware('throttle:media-view')->name('download');
+Route::get('/media/view/{id}', DownloadController::class)->middleware('throttle:media-view')->name('download');
