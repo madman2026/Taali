@@ -41,7 +41,7 @@ final class LoginAction
         }
         $user = User::whereEmail($data->email)->first();
         if (Hash::check($data->password, $user->password)) {
-            Auth::login($user);
+            Auth::guard('web')->login($user , true);
             RateLimiter::clear($key);
 
             return Auth::user();

@@ -3,7 +3,6 @@
 namespace Modules\User\Models;
 
 use App\Contracts\HasSettings;
-use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,10 +11,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Modules\Content\Models\Content;
+use Modules\Interaction\Models\Comment;
 use Modules\Interaction\Models\Comment as InteractionComment;
 use Modules\Interaction\Models\Like;
 use Modules\Interaction\Models\View;
+use Modules\Media\Enums\MediaTypeEnum;
 use Modules\Media\Models\Media;
+use Modules\User\Database\Factories\UserFactory;
+use Modules\User\Enums\UserStatusEnum;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Translatable\HasTranslations;
 
@@ -25,15 +28,6 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory , HasRoles, HasSettings, HasTranslations, Notifiable, SoftDeletes;
-
-    /**
-     * Translatable attributes (if you plan to use localization for user names, etc.)
-     *
-     * @var array<int, string>
-     */
-    public array $translatable = [
-        'name',
-    ];
 
     /**
      * The attributes that are mass assignable.
@@ -47,7 +41,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'settings',
     ];
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -66,28 +59,22 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function casts(): array
     {
         return [
+            'status' => UserStatusEnum::class,
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'settings' => 'array',
         ];
     }
 
-    /**
-     * Alias the legacy "status" column to an "is_active" attribute.
-     */
-    protected function isActive(): Attribute
+    public function getAvatarAttribute()
     {
-        return Attribute::make(
-            get: fn ($value, array $attributes): bool => (bool) ($attributes['status'] ?? false),
-            set: fn ($value): array => ['status' => (bool) $value]
-        );
+        return $this->media()->whereType(MediaTypeEnum::IMAGE->value)->first();
     }
 
-    public function image()
+    public function media()
     {
         return $this->morphMany(Media::class, 'mediable');
     }
-
     /**
      * Example custom accessor for full name (optional)
      */
@@ -104,27 +91,18 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Content::class);
     }
 
-    /**
-     * @return HasMany<View>
-     */
-    public function views(): HasMany
+    public function views()
     {
         return $this->hasMany(View::class);
     }
 
-    /**
-     * @return HasMany<Like>
-     */
-    public function likes(): HasMany
+    public function likes()
     {
         return $this->hasMany(Like::class);
     }
 
-    /**
-     * @return HasMany<InteractionComment>
-     */
-    public function comments(): HasMany
+    public function comments()
     {
-        return $this->hasMany(InteractionComment::class);
+        return $this->hasMany(Comment::class);
     }
 }

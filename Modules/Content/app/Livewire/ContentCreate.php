@@ -2,6 +2,7 @@
 
 namespace Modules\Content\Livewire;
 
+use App\Contracts\HasNotifableComponent;
 use Devrabiul\ToastMagic\Facades\ToastMagic;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -14,7 +15,7 @@ use Modules\Content\Services\ContentService;
 #[Title('Content Create')]
 class ContentCreate extends Component
 {
-    use WithFileUploads;
+    use WithFileUploads , HasNotifableComponent;
 
     #[Validate('required|string|max:255')]
     public $title;
@@ -25,7 +26,7 @@ class ContentCreate extends Component
     #[Validate('nullable|string')]
     public $description;
 
-    #[Validate('nullable|image|max:10000')]
+    #[Validate('nullable|image|max:15000')]
     public $image;
 
     #[Validate('nullable|file|mimetypes:audio/*|max:30000')]
@@ -68,12 +69,12 @@ class ContentCreate extends Component
         $result = $this->service->create($data);
 
         if ($result->status) {
-            ToastMagic::success(__('Content created and queued for processing!'));
+            $this->success(__('Content created and queued for processing!'));
 
             return $this->redirectRoute('content.index');
 
         } else {
-            ToastMagic::error(__('Something Wen Wrong!'));
+            $this->error(__('Something Wen Wrong!'));
         }
     }
 

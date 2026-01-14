@@ -3,6 +3,7 @@
 namespace Modules\Content\Livewire;
 
 use App\Contracts\HasAparatUrl;
+use App\Contracts\HasNotifableComponent;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Modules\Content\Models\Content;
@@ -10,7 +11,7 @@ use Modules\Content\Services\ContentService;
 
 class ContentUpdate extends Component
 {
-    use HasAparatUrl, WithFileUploads;
+    use HasAparatUrl, WithFileUploads , HasNotifableComponent;
 
     public Content $content;
 
@@ -85,13 +86,12 @@ class ContentUpdate extends Component
             'audio' => $this->audio,
         ];
 
-        // آپدیت از طریق سرویس
         $result = $this->service->update($this->content, $data);
 
         if ($result->status ?? false) {
-            $this->dispatch('toastMagic', status: 'success', title: 'انجام شد!', message: 'در صف پردازش قرار گرفت!');
+            $this->success('در صف پردازش قرار گرفت!');
         } else {
-            $this->dispatch('toastMagic', status: 'error', title: 'خطا!', message: 'مشکلی پیش آمد!');
+            $this->error('مشکلی پیش آمد!');
         }
 
         return $this->redirectRoute('home');

@@ -2,16 +2,12 @@
 
 namespace Modules\Interaction\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Content\Models\Content;
 use Modules\User\Models\User;
 
-// use Modules\Interaction\Database\Factories\LikeFactory;
-
 class Like extends Model
 {
-    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -31,9 +27,4 @@ class Like extends Model
     {
         return $this->belongsTo(Content::class);
     }
-
-    // protected static function newFactory(): LikeFactory
-    // {
-    //     // return LikeFactory::new();
-    // }
 }

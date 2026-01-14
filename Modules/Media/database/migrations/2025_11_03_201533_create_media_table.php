@@ -11,12 +11,10 @@ return new class extends Migration
         Schema::create('media', function (Blueprint $table) {
             $table->id();
             $table->morphs('mediable');
-            $table->string('status')->nullable();
-            $table->string('name')->nullable();
+            $table->string('status')->default(\Modules\Media\Enums\MediaStatusEnum::PENDING->value);
             $table->string('path')->nullable();
             $table->string('disk')->default('local')->nullable();
-            $table->string('type')->default('image')->nullable();
-            $table->string('mime_type')->nullable();
+            $table->string('type')->default(\Modules\Media\Enums\MediaTypeEnum::IMAGE);
             $table->unsignedBigInteger('size')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();

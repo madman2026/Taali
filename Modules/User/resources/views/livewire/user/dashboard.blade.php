@@ -62,11 +62,11 @@
                 wire:click="confirmToggleStatus"
                 class="flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-200 w-full"
                 :class="{
-                    'text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/30': @js($isActive),
-                    'text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/30': !@js($isActive)
+                    'text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/30': @js($activate),
+                    'text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/30': !@js($activate)
                 }">
-                <x-dynamic-component :component="'heroicon-o-' . ($isActive ? 'pause-circle' : 'play-circle')" class="w-5 h-5" />
-                {{ $isActive ? __('Deactivate Account') : __('Activate Account') }}
+                <x-dynamic-component :component="'heroicon-o-' . ($activate ? 'pause-circle' : 'play-circle')" class="w-5 h-5" />
+                {{ $activate ? __('Deactivate Account') : __('Activate Account') }}
             </button>
 
             <!-- Delete Account -->

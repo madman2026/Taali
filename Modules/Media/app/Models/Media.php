@@ -13,16 +13,14 @@ class Media extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
         'path',
         'type',
-        'size',
-        'mime_type',
         'disk',
         'metadata',
     ];
 
     protected $casts = [
+        'status' => MediaTypeEnum::class,
         'type' => MediaTypeEnum::class,
         'metadata' => 'array',
     ];

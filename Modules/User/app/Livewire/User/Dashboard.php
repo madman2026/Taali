@@ -2,7 +2,9 @@
 
 namespace Modules\User\Livewire\User;
 
+use App\Contracts\HasNotifableComponent;
 use Devrabiul\ToastMagic\Facades\ToastMagic;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -11,18 +13,18 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Modules\User\Enums\UserStatusEnum;
+use Modules\User\Models\User;
 use Throwable;
 
 #[Layout('components.layouts.master')]
 #[Title('Dashboard')]
 class Dashboard extends Component
 {
-    public $user;
-
-    public bool $isActive = false;
-
+    use HasNotifableComponent;
+    public Authenticatable|User $user;
+    public ?bool $activate = null;
     public int $views = 0;
-
     public int $likes = 0;
 
     public int $commentsCount = 0;
@@ -34,6 +36,7 @@ class Dashboard extends Component
     public function mount()
     {
         $this->user = Auth::user();
+        $this->activate = $this->user->status === UserStatusEnum::ACTIVE;
         $this->contents = collect();
         $this->loadData();
     }
@@ -42,12 +45,12 @@ class Dashboard extends Component
     {
         $this->dispatch('openConfirmModal', data: [
             'title' => __('Toggle Account Status'),
-            'message' => $this->isActive
+            'message' => $this->activate
                 ? __('Are you sure you want to deactivate your account?')
                 : __('Are you sure you want to activate your account?'),
             'confirmEvent' => 'toggleActivateAccount',
-            'confirmButtonText' => $this->isActive ? __('Deactivate') : __('Activate'),
-            'confirmColor' => $this->isActive ? 'amber' : 'green',
+            'confirmButtonText' => $this->activate ? __('Deactivate') : __('Activate'),
+            'confirmColor' => $this->activate ? 'amber' : 'green',
         ]);
     }
 
@@ -77,13 +80,13 @@ class Dashboard extends Component
             ->limit(5)
             ->get();
 
-        $this->isActive = $this->user->status;
+        $this->activate = $this->user->status === UserStatusEnum::ACTIVE->value;
     }
 
     #[On('toggleActivateAccount')]
     public function toggleActivateAccount(): void
     {
-        if ($this->isActive) {
+        if ($this->activate) {
             $this->deactivateAccount();
 
             return;
@@ -94,16 +97,16 @@ class Dashboard extends Component
 
     public function deactivateAccount(): void
     {
-        $this->user->update(['status' => false]);
-        $this->isActive = false;
-        ToastMagic::success('حساب شما غیرفعال شد.');
+        $this->user->update(['status' => UserStatusEnum::INACTIVE]);
+        $this->activate = false;
+        $this->success('حساب شما غیرفعال شد.');
     }
 
     public function activateAccount(): void
     {
-        $this->user->update(['status' => true]);
-        $this->isActive = true;
-        ToastMagic::success('حساب شما فعال شد.');
+        $this->user->update(['status' => UserStatusEnum::ACTIVE]);
+        $this->activate = true;
+        $this->success( __('your account has been activated'));
     }
 
     #[On('deleteAccount')]
@@ -114,14 +117,13 @@ class Dashboard extends Component
                 $this->user->delete();
                 Auth::logout();
             });
-
-            ToastMagic::success(__('Account Deleted Successfully!'));
+            $this->success( __('Account Deleted Successfully!'));
 
             return redirect()->route('home');
 
         } catch (Throwable $e) {
             report($e);
-            ToastMagic::error(__('خطایی در حذف حساب رخ داد.'));
+            $this->error(__('خطایی در حذف حساب رخ داد.'));
         }
 
         return null;

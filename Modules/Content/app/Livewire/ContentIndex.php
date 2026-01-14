@@ -2,6 +2,7 @@
 
 namespace Modules\Content\Livewire;
 
+use App\Contracts\HasNotifableComponent;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -12,7 +13,7 @@ use Modules\Content\Models\Content;
 #[Title('Content List')]
 class ContentIndex extends Component
 {
-    use WithPagination;
+    use WithPagination , HasNotifableComponent;
 
     public string $search = '';
 
@@ -38,7 +39,7 @@ class ContentIndex extends Component
         $content = Content::findOrFail($id);
         $content->delete();
 
-        $this->dispatch('toast', type: 'success', message: 'محتوا با موفقیت حذف شد.');
+        $this->success('محتوا با موفقیت حذف شد.');
     }
 
     public function getContentsProperty()

@@ -39,14 +39,13 @@ class Register extends Component
 
     public function register()
     {
-        dd($this->validate());
         $result = $this->service->register(RegisterData::fromArray($this->validate()));
         if (! $result->status) {
             throw ValidationException::withMessages([
                 'email' => __($result->message),
             ]);
         }
-
+        $this->dispatch('toastMagic',status: 'success', title: __('Register Successful'));
         return redirect()->intended(route('home'));
     }
 }

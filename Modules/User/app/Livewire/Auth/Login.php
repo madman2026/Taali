@@ -43,7 +43,7 @@ class Login extends Component
             ]);
         }
 
-        ToastMagic::success(__('Login Successful'));
+        $this->dispatch('toastMagic' , status: 'success', title: __('Login Successful'));
         $this->redirectRoute('home');
     }
 }

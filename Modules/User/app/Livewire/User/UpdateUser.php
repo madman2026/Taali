@@ -2,6 +2,7 @@
 
 namespace Modules\User\Livewire\User;
 
+use App\Contracts\HasNotifableComponent;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -16,7 +17,7 @@ use Modules\User\Services\UserService;
 #[Title('Update User')]
 class UpdateUser extends Component
 {
-    use WithFileUploads;
+    use WithFileUploads , HasNotifableComponent;
 
     public string $email;
 
@@ -39,7 +40,7 @@ class UpdateUser extends Component
         $user = auth('web')->user();
         $this->email = $user->email;
         $this->name = $user->name;
-        $this->existingImagePath = $user->image->first()?->path ?? '';
+        $this->existingImagePath = $user->avatar?->path ?? '';
     }
 
     public function updateUser()
@@ -56,18 +57,17 @@ class UpdateUser extends Component
         if ($this->uploadedImage) {
 
             // Delete old image if exists
-            if ($user->image()->exists()) {
-                $user->image()->delete();
+            if ($user->avatar) {
+                $user->avatar->delete();
             }
 
             // Store new
             $path = $this->uploadedImage->store('profile-pictures', 'public');
 
             // Create new image record
-            $userImage = $user->image()->create([
+            $userImage = $user->media()->create([
                 'path' => $path,
                 'type' => MediaTypeEnum::IMAGE,
-                'mime_type' => $this->uploadedImage->getMimeType(),
             ]);
         }
 
@@ -80,9 +80,9 @@ class UpdateUser extends Component
         $response = $this->service->updateUser($data);
 
         if ($response->status) {
-            $this->dispatch('toastMagic', status: 'success', title: __('success'), message: __('Update Successful'));
+            $this->success(title: __('success'), message: __('Update Successful'));
         } else {
-            $this->dispatch('toastMagic', status: 'error', title: __('error'), message: $response->message ?? __('Update Failed'));
+            $this->error(title: __('error'), message: $response->message ?? __('Update Failed'));
         }
     }
 
