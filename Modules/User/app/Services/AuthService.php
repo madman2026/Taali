@@ -8,7 +8,6 @@ use Modules\User\Actions\LoginAction;
 use Modules\User\Actions\RegisterAction;
 use Modules\User\Contracts\LoginData;
 use Modules\User\Contracts\RegisterData;
-use Modules\User\Events\Auth\Registered;
 
 final class AuthService extends BaseService
 {
@@ -30,7 +29,6 @@ final class AuthService extends BaseService
     {
         return $this->execute(function () use ($registerData) {
             $user = $this->registerAction->handle($registerData);
-            event(new Registered($user));
 
             return $user;
         });

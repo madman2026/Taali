@@ -3,7 +3,6 @@
 namespace Modules\Content\Livewire;
 
 use App\Contracts\HasNotifableComponent;
-use Devrabiul\ToastMagic\Facades\ToastMagic;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
@@ -15,7 +14,7 @@ use Modules\Content\Services\ContentService;
 #[Title('Content Create')]
 class ContentCreate extends Component
 {
-    use WithFileUploads , HasNotifableComponent;
+    use HasNotifableComponent , WithFileUploads;
 
     #[Validate('required|string|max:255')]
     public $title;
@@ -66,6 +65,7 @@ class ContentCreate extends Component
         if ($this->videoUrl) {
             $data['videoUrl'] = $this->videoHash;
         }
+
         $result = $this->service->create($data);
 
         if ($result->status) {

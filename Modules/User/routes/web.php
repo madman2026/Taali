@@ -8,12 +8,16 @@ Route::middleware('guest')->prefix('auth')->group(function () {
     Route::get('register', \Modules\User\Livewire\Auth\Register::class)->name('register');
 });
 
+// 'verification.notice' should be maked
+
 Route::middleware('auth')->prefix('user')->group(function () {
     Route::post('logout', LogoutController::class)->middleware('auth')->name('logout');
 
     Route::get('reset-password', \Modules\User\Livewire\User\ResetPassword::class)->name('password.reset');
 
     Route::get('dashboard', \Modules\User\Livewire\User\Dashboard::class)->name('dashboard');
+
+    Route::get('notifications', \Modules\User\Livewire\User\Notifications::class)->name('notifications');
 
     Route::get('profile', \Modules\User\Livewire\User\UpdateUser::class)->name('profile');
 

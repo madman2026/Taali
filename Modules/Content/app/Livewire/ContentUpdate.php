@@ -11,7 +11,7 @@ use Modules\Content\Services\ContentService;
 
 class ContentUpdate extends Component
 {
-    use HasAparatUrl, WithFileUploads , HasNotifableComponent;
+    use HasAparatUrl, HasNotifableComponent , WithFileUploads;
 
     public Content $content;
 
@@ -51,7 +51,7 @@ class ContentUpdate extends Component
         $this->title = $Content->title;
         $this->excerpt = $Content->excerpt;
         $this->description = $Content->description;
-        $this->videoUrl = 'https://www.aparat.com/v/'.$Content->video->path;
+        $this->videoUrl = 'https://www.aparat.com/v/'.$Content->video?->path;
 
         $this->currentImage = $Content->image?->temporary_url;
         $this->currentAudio = $Content->audio?->temporary_url;
