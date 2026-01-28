@@ -4,23 +4,23 @@ namespace App\Contracts;
 
 trait HasNotifableComponent
 {
-    public function success(string $title , mixed $message)
+    public function success(string $title, mixed $message = null)
     {
-        $this->notif('success' , $title , $message);
+        $this->notif('success', $title, $message);
     }
 
-    public function error(string $title , mixed $message)
+    public function error(string $title, mixed $message = null)
     {
-        $this->notif('error' , $title , $message);
+        $this->notif('error', $title, $message);
     }
 
-    public function warning(string $title , mixed $message)
+    public function warning(string $title, mixed $message = null)
     {
-        $this->notif('warning' , $title , $message);
+        $this->notif('warning', $title, $message);
     }
 
-    public function notif($status , $title , mixed $message = null)
+    public function notif($status, $title, mixed $message = null)
     {
-        $this->dispatch('toastMagic' , status: $status , title: $title , message: $message);
+        $this->dispatch('toastMagic', status: $status, title: $title, message: $message);
     }
 }

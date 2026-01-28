@@ -6,6 +6,11 @@ use Illuminate\Support\Str;
 
 trait HasSlug
 {
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     protected static function bootHasSlug()
     {
         static::creating(function ($model) {
