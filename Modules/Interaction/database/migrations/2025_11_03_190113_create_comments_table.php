@@ -18,6 +18,8 @@ return new class extends Migration
             $table->morphs('commentable');
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('comment_id')->nullable()->constrained('comments')->cascadeOnDelete();
+            $table->string('status')->default(\Modules\Interaction\Enums\CommentStatusEnum::PENDING);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -11,12 +11,14 @@ return new class extends Migration
         Schema::create('contents', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
-            $table->string('type');
+            $table->string('type')->default(\Modules\Content\Enums\ContentTypeEnum::Article);
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('excerpt')->nullable();
             $table->text('description')->nullable();
-            $table->boolean('published')->default(false);
+            $table->text('error')->nullable();
+            $table->string('status')->default(\Modules\Content\Enums\ContentStatusEnum::PENDING);
+            $table->softDeletes();
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
         });

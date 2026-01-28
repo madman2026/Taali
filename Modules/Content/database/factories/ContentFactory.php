@@ -3,6 +3,7 @@
 namespace Modules\Content\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Modules\Content\Enums\ContentStatusEnum;
 
 class ContentFactory extends Factory
 {
@@ -16,6 +17,18 @@ class ContentFactory extends Factory
      */
     public function definition(): array
     {
-        return [];
+        return [
+            'title' => $this->faker->sentence(),
+            'slug' => $this->faker->slug(),
+            'description' => $this->faker->paragraph(5),
+            'excerpt' => $this->faker->paragraph(1),
+            'published_at' => $this->faker->date(),
+            'status' => $this->faker->randomElement([
+                ContentStatusEnum::REJECTED,
+                ContentStatusEnum::PENDING,
+                ContentStatusEnum::APPROVED,
+            ]),
+
+        ];
     }
 }

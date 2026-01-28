@@ -17,7 +17,8 @@ class CommentFactory extends Factory
     public function definition(): array
     {
         return [
-            'body' => fake($this->faker->paragraph()),
+            'body' => $this->faker->paragraph(),
+            'ip_address' => $this->faker->ipv4(),
         ];
     }
 }

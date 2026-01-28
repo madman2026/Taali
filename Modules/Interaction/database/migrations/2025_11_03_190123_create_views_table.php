@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('views', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->foreignId('content_id')->constrained('contents')->cascadeOnDelete();
-            $table->ipAddress('ip_address');
+            $table->morphs('viewable');
+            $table->ipAddress();
             $table->timestamps();
-
-            $table->index(['user_id', 'content_id']);
+            $table->softDeletes();
+            $table->index('user_id');
         });
     }
 
