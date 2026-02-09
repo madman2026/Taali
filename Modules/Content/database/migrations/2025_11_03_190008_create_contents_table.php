@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('contents', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary()->autoIncrement();
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->string('type')->default(\Modules\Content\Enums\ContentTypeEnum::Article);
             $table->string('title');
