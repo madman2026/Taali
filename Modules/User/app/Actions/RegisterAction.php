@@ -12,7 +12,6 @@ final class RegisterAction
 {
     public function handle(RegisterData $data): ?Authenticatable
     {
-        dd($data);
         $user = User::create([
             'name' => $data->name,
             'email' => $data->email,
