@@ -3,18 +3,20 @@
 namespace Modules\Interaction\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Prunable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Content\Models\Content;
 use Modules\User\Models\User;
 
 class View extends Model
 {
+    use Prunable , SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
      */
     protected $fillable = [
         'user_id',
-        'content_id',
         'ip_address',
     ];
 
@@ -25,6 +27,6 @@ class View extends Model
 
     public function content()
     {
-        return $this->belongsTo(Content::class);
+        return $this->morphTo(Content::class);
     }
 }

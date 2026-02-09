@@ -3,11 +3,14 @@
 namespace Modules\Interaction\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Prunable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Content\Models\Content;
 use Modules\User\Models\User;
 
 class Like extends Model
 {
+    use Prunable , SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -25,6 +28,6 @@ class Like extends Model
 
     public function content()
     {
-        return $this->belongsTo(Content::class);
+        return $this->morphTo(Content::class);
     }
 }

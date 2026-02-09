@@ -3,31 +3,30 @@
 namespace Modules\User\Models;
 
 use App\Contracts\HasSettings;
+use App\Contracts\Interactable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Modules\Content\Models\Content;
-use Modules\Interaction\Models\Comment;
-use Modules\Interaction\Models\Comment as InteractionComment;
-use Modules\Interaction\Models\Like;
-use Modules\Interaction\Models\View;
 use Modules\Media\Enums\MediaTypeEnum;
 use Modules\Media\Models\Media;
 use Modules\User\Database\Factories\UserFactory;
 use Modules\User\Enums\UserStatusEnum;
+use Modules\User\Observers\UserObserver;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Translatable\HasTranslations;
 
 // use Modules\User\Database\Factories\UserFactory;
 
+#[ObservedBy(UserObserver::class)]
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory , HasRoles, HasSettings, HasTranslations, Notifiable, SoftDeletes;
+    use HasFactory , HasRoles, HasSettings, HasTranslations, Interactable, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -41,6 +40,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'settings',
     ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -75,6 +75,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->morphMany(Media::class, 'mediable');
     }
+
     /**
      * Example custom accessor for full name (optional)
      */
@@ -91,18 +92,8 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Content::class);
     }
 
-    public function views()
+    protected static function newFactory()
     {
-        return $this->hasMany(View::class);
-    }
-
-    public function likes()
-    {
-        return $this->hasMany(Like::class);
-    }
-
-    public function comments()
-    {
-        return $this->hasMany(Comment::class);
+        return UserFactory::new();
     }
 }
