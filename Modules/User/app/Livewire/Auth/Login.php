@@ -2,7 +2,6 @@
 
 namespace Modules\User\Livewire\Auth;
 
-use Devrabiul\ToastMagic\Facades\ToastMagic;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -43,7 +42,7 @@ class Login extends Component
             ]);
         }
 
-        $this->dispatch('toastMagic' , status: 'success', title: __('Login Successful'));
+        $this->dispatch('toastMagic', status: 'success', title: __('Login Successful'));
         $this->redirectRoute('home');
     }
 }

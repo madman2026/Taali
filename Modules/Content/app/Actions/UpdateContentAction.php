@@ -2,21 +2,20 @@
 
 namespace Modules\Content\Actions;
 
+use App\Contracts\Facades\DTO;
 use App\Contracts\HasAparatUrl;
-use Modules\Content\Enums\ContentStatusEnum;
-use Modules\Content\Events\ContentCreated;
 use Modules\Content\Models\Content;
+use Modules\Content\Repositories\ContentRepository;
+use Modules\Media\Enums\MediaStatusEnum;
 use Modules\Media\Enums\MediaTypeEnum;
+use Modules\Media\Repositories\MediaRepository;
 
 class UpdateContentAction
 {
     use HasAparatUrl;
 
-    public function handle(Content $content, array $data): Content
+    public function handle(Content $content, array $data, ContentRepository $repository, MediaRepository $mediaRepository): Content
     {
-        // ---------------------------
-        // 1) Update text fields
-        // ---------------------------
         $content->fill([
             'title' => $data['title'] ?? $content->title,
             'excerpt' => $data['excerpt'] ?? $content->excerpt,
@@ -24,53 +23,46 @@ class UpdateContentAction
         ]);
         $content->save();
 
-        // ---------------------------
-        // 2) Handle media
-        // ---------------------------
-        // IMAGE
         if (! empty($data['image'])) {
             $path = $data['image']->store('contents/images/'.now()->format('Ymd'), 'public');
-            $content->media()->updateOrCreate(
-                ['type' => MediaTypeEnum::IMAGE->value],
-                [
+            $mediaRepository->updateOrCreateForContent(
+                ['type' => MediaTypeEnum::IMAGE],
+                $content,
+                DTO::tryFrom([
                     'path' => $path,
                     'disk' => 'public',
-                    'status' => ContentStatusEnum::PROCCESSING->value,
-                ]
+                    'status' => MediaStatusEnum::PENDING,
+                ])
             );
         }
 
-        // AUDIO
         if (! empty($data['audio'])) {
             $path = $data['audio']->store('contents/audios/'.now()->format('Ymd'), 'public');
-            $content->media()->updateOrCreate(
-                ['type' => MediaTypeEnum::AUDIO->value],
-                [
+            $mediaRepository->updateOrCreateForContent(
+                ['type' => MediaTypeEnum::AUDIO],
+                $content,
+                DTO::tryFrom([
                     'path' => $path,
                     'disk' => 'public',
-                    'status' => ContentStatusEnum::PROCCESSING->value,
-                ]
+                    'status' => MediaStatusEnum::PENDING,
+                ])
             );
         }
 
-        // VIDEO / Aparat
         if (array_key_exists('videoUrl', $data)) {
             $hash = $data['videoUrl'] ? $this->extractAparatHash($data['videoUrl']) : null;
-            $content->media()->updateOrCreate(
-                ['type' => MediaTypeEnum::VIDEO->value],
-                [
+            $mediaRepository->updateOrCreateForContent(
+                ['type' => MediaTypeEnum::VIDEO],
+                $content,
+                DTO::tryFrom([
                     'path' => $hash,
-                    'status' => ContentStatusEnum::PROCCESSING->value,
+                    'status' => MediaStatusEnum::PENDING,
                     'metadata' => $hash ? ['service' => 'aparat'] : null,
-                ]
+                ])
             );
         }
+        $content->load('media');
 
-        // ---------------------------
-        // 3) Dispatch listener/job
-        // ---------------------------
-        ContentCreated::dispatch($content->load('media'));
-
-        return $content->load('media');
+        return $content;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Contracts\DTO;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -14,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind('DTO', DTO::class);
     }
 
     /**
@@ -24,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
     {
         RateLimiter::for('media-view', function (Request $request) {
             return [
-                Limit::perMinute(10)->by($request->ip()),
+                Limit::perMinute(100)->by($request->ip()),
             ];
         });
     }
