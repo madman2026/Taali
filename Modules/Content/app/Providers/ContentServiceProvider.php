@@ -2,10 +2,10 @@
 
 namespace Modules\Content\Providers;
 
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
-use Modules\Content\Models\Content;
-use Modules\Content\Observers\ContentObserver;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -27,9 +27,13 @@ class ContentServiceProvider extends ServiceProvider
         $this->registerCommandSchedules();
         $this->registerTranslations();
         $this->registerConfig();
+
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
-        Content::observe(ContentObserver::class);
+
+        RateLimiter::for('content-create', function (object $job) {
+            return Limit::perMinute(5)->by($job->content->user->id);
+        });
     }
 
     /**
