@@ -7,7 +7,6 @@
             <x-form.button :href="route('about')" variant="link">{{ __('About Us')}}</x-form.button>
             <x-form.button :href="route('contact')" variant="link">{{ __('Contact Us')}}</x-form.button>
             <x-form.button :href="route('search')" variant="link">{{ __('Search')}}</x-form.button>
-            <x-form.button :href="route('content.index')" variant="link">{{ __('Contents')}}</x-form.button>
         </div>
 
         <div class="flex items-center gap-3">
@@ -40,7 +39,7 @@
                                 <a href="{{ route('dashboard') }}"
                                    class="flex items-center gap-3 px-4 py-2.5 rounded-md mx-1 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
                                     <x-heroicon-o-home class="w-5 h-5" />
-                                    داشبورد
+                                    {{__('dashboard')}}
                                 </a>
                             </li>
                             @hasrole('super-admin')
@@ -48,21 +47,14 @@
                                 <a href="{{ route('content.create') }}"
                                    class="flex items-center gap-3 px-4 py-2.5 rounded-md mx-1 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
                                     <x-heroicon-o-plus-circle class="w-5 h-5" />
-                                    {{__('Content Create')}}
+                                    {{__('content create')}}
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ route('content.index') }}"
                                    class="flex items-center gap-3 px-4 py-2.5 rounded-md mx-1 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
                                     <x-heroicon-o-numbered-list class="w-5 h-5" />
-                                    {{__('Content Index')}}
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('comment.index') }}"
-                                   class="flex items-center gap-3 px-4 py-2.5 rounded-md mx-1 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
-                                    <x-heroicon-o-chat-bubble-left-right class="w-5 h-5" />
-                                    {{__('Manage Comments')}}
+                                    {{__('content index')}}
                                 </a>
                             </li>
                             @endhasrole
@@ -70,7 +62,14 @@
                                 <a href="{{ route('settings') }}"
                                    class="flex items-center gap-3 px-4 py-2.5 rounded-md mx-1 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
                                     <x-heroicon-o-cog-6-tooth class="w-5 h-5" />
-                                    تنظیمات
+                                    {{__('settings')}}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('notifications') }}"
+                                   class="flex items-center gap-3 px-4 py-2.5 rounded-md mx-1 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                                    <x-heroicon-o-chat-bubble-left class="w-5 h-5" />
+                                    {{__('notifications')}}
                                 </a>
                             </li>
                         </ul>
@@ -81,7 +80,7 @@
                                 <button type="submit"
                                         class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md mx-1 transition">
                                     <x-heroicon-o-arrow-right-on-rectangle class="w-5 h-5" />
-                                    خروج
+                                    {{__('logout')}}
                                 </button>
                             </form>
                         </div>
@@ -90,11 +89,11 @@
             @else
                 <a href="{{ route('login') }}"
                    class="px-4 py-2 rounded-lg bg-primary text-surface font-medium hover:bg-accent-1 transition-colors duration-200">
-                    ورود
+                    {{__('signin')}}
                 </a>
                 <a href="{{ route('register') }}"
                    class="px-4 py-2 rounded-lg border border-primary text-primary font-medium hover:bg-primary hover:text-surface transition-colors duration-200">
-                    ثبت‌نام
+                    {{__('signup')}}
                 </a>
             @endauth
 
