@@ -2,6 +2,7 @@
 
 namespace Modules\User\Livewire\Auth;
 
+use App\Contracts\HasNotifableComponent;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -14,6 +15,8 @@ use Modules\User\Services\AuthService;
 #[Title('Register')]
 class Register extends Component
 {
+    use HasNotifableComponent;
+
     #[Validate('required|email|unique:users,email')]
     public ?string $email;
 
@@ -45,7 +48,8 @@ class Register extends Component
                 'email' => __($result->message),
             ]);
         }
-        $this->dispatch('toastMagic',status: 'success', title: __('Register Successful'));
+        $this->success(__('Register Successful'));
+
         return redirect()->intended(route('home'));
     }
 }

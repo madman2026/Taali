@@ -17,7 +17,7 @@ use Modules\User\Services\UserService;
 #[Title('Update User')]
 class UpdateUser extends Component
 {
-    use WithFileUploads , HasNotifableComponent;
+    use HasNotifableComponent , WithFileUploads;
 
     public string $email;
 

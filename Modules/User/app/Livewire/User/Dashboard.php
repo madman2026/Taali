@@ -3,7 +3,6 @@
 namespace Modules\User\Livewire\User;
 
 use App\Contracts\HasNotifableComponent;
-use Devrabiul\ToastMagic\Facades\ToastMagic;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
@@ -22,9 +21,13 @@ use Throwable;
 class Dashboard extends Component
 {
     use HasNotifableComponent;
+
     public Authenticatable|User $user;
+
     public ?bool $activate = null;
+
     public int $views = 0;
+
     public int $likes = 0;
 
     public int $commentsCount = 0;
@@ -106,7 +109,7 @@ class Dashboard extends Component
     {
         $this->user->update(['status' => UserStatusEnum::ACTIVE]);
         $this->activate = true;
-        $this->success( __('your account has been activated'));
+        $this->success(__('your account has been activated'));
     }
 
     #[On('deleteAccount')]
@@ -114,12 +117,16 @@ class Dashboard extends Component
     {
         try {
             DB::transaction(function () {
-                $this->user->delete();
-                Auth::logout();
-            });
-            $this->success( __('Account Deleted Successfully!'));
+                if (! $this->user->hasRole('super-admin')) {
+                    $this->user->delete();
+                    Auth::logout();
+                    $this->success(__('Account Deleted Successfully!'));
 
-            return redirect()->route('home');
+                    return redirect()->route('home');
+                } else {
+                    $this->error(__('Super Admin cant delete itself account!'));
+                }
+            });
 
         } catch (Throwable $e) {
             report($e);
